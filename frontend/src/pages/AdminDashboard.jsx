@@ -33,6 +33,7 @@ function AdminDashboard() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMsg, setPopupMsg] = useState('');
   const [userDocuments, setUserDocuments] = useState(null);
+  const [selectedUser, setSelectedUser] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const pollRef = useRef(null);
@@ -339,7 +340,7 @@ function AdminDashboard() {
   if (loading) return <LoadingSkeleton />;
 
   return (
-    <div className="admin-dashboard">
+    <div className="admin-dashboard-fullscreen">
 
       {/* REAL-TIME POPUP */}
       {showPopup && (
@@ -348,36 +349,7 @@ function AdminDashboard() {
         </div>
       )}
 
-      {/* PENDING DEPOSITS - FIXED: pendingFinal → pendingDeposits */}
-      {pendingDeposits.length > 0 && (
-        <div className="pending-deposits-card">
-          <h3><FaUserShield /> Pending Deposits ({pendingDeposits.length})</h3>
-          <div className="deposit-list">
-            {pendingDeposits.map(tx => (
-              <div key={tx._id} className="deposit-item">
-                <div>
-                  <strong>{tx.userId?.name || 'Unknown'}</strong> • ${tx.amount.toLocaleString()} • {tx.method}
-                  {tx.receipt && (
-                    <a href={`${API}${tx.receipt}`} target="_blank" rel="noopener noreferrer">
-                      View Receipt
-                    </a>
-                  )}
-                </div>
-                <div className="deposit-actions">
-                  <button onClick={() => handleDepositAction(tx._id, 'confirm')} className="confirm-btn">
-                    <FaCheck /> Confirm
-                  </button>
-                  <button onClick={() => handleDepositAction(tx._id, 'reject')} className="reject-btn">
-                    <FaTimes /> Reject
-                  </button>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* HEADER */}
+      {/* HEADER - MOVED BEFORE PENDING DEPOSITS */}
       <header className="admin-header">
         <h1><FaUserShield /> Admin Dashboard</h1>
         <div className="header-actions">
@@ -396,94 +368,142 @@ function AdminDashboard() {
         </div>
       </header>
 
-      {/* AUDIT LOG */}
+      {/* MAIN CONTENT GRID */}
+      <div className="admin-main-content">
+        {/* LEFT PANEL - USER LIST */}
+        <div className="user-list-panel">
+          <h3>All Users ({users.length})</h3>
+          <div className="user-emails-list">
+            {users.map(u => (
+              <div
+                key={u._id}
+                className={`user-email-item ${selectedUser?._id === u._id ? 'active' : ''}`}
+                onClick={() => setSelectedUser(u)}
+              >
+                <div className="user-email">{u.email}</div>
+                <div className="user-name-small">{u.name}</div>
+              </div>
+            ))}
+          </div>
+
+          <div className="pagination">
+            <button onClick={() => fetchUsers(search, page - 1)} disabled={page === 1}>Previous</button>
+            <span>Page {page} of {totalPages}</span>
+            <button onClick={() => fetchUsers(search, page + 1)} disabled={page === totalPages}>Next</button>
+          </div>
+        </div>
+
+        {/* RIGHT PANEL - USER DETAILS */}
+        <div className="user-details-panel">
+          {selectedUser ? (
+            <div className="user-details">
+              <div className="user-header">
+                <div className="user-avatar">{selectedUser.name.charAt(0).toUpperCase()}</div>
+                <div className="user-info">
+                  <h3>{selectedUser.name}</h3>
+                  <p>{selectedUser.email}</p>
+                  <p className="user-joined">Joined: {new Date(selectedUser.createdAt).toLocaleDateString()}</p>
+                </div>
+              </div>
+
+              <div className="user-balance">
+                <h4>Account Balances</h4>
+                <div className="balance-grid">
+                  <div className="balance-item">
+                    <span className="balance-label">Checking:</span>
+                    <span className="balance-amount">${(selectedUser.balance?.checking || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="balance-item">
+                    <span className="balance-label">Savings:</span>
+                    <span className="balance-amount">${(selectedUser.balance?.savings || 0).toLocaleString()}</span>
+                  </div>
+                  <div className="balance-item">
+                    <span className="balance-label">USDT:</span>
+                    <span className="balance-amount">${(selectedUser.balance?.usdt || 0).toLocaleString()}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div className="user-actions">
+                <h4>Actions</h4>
+                <div className="action-buttons-grid">
+                  <button onClick={() => openBalanceEdit(selectedUser)} className="action-btn edit-balance">
+                    Edit Balance
+                  </button>
+                  <button onClick={() => openTx(selectedUser)} className="action-btn view-transactions">
+                    View Transactions
+                  </button>
+                  <button onClick={() => viewDocuments(selectedUser)} className="action-btn view-documents">
+                    View Documents
+                  </button>
+                  <button onClick={() => {
+                    // Placeholder for loans action
+                    toast.info('Loans management coming soon');
+                  }} className="action-btn manage-loans">
+                    Manage Loans
+                  </button>
+                  <button onClick={() => {
+                    // Placeholder for KYC action
+                    viewDocuments(selectedUser);
+                  }} className="action-btn kyc-documents">
+                    KYC Documents
+                  </button>
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="no-user-selected">
+              <div className="no-selection-icon">👤</div>
+              <h3>Select a user</h3>
+              <p>Click on any email from the list to view user details and perform actions.</p>
+            </div>
+          )}
+        </div>
+      </div>
+
+      {/* COMPACT RECENT ACTIVITY */}
       {adminNotifs.length > 0 && (
-        <div className="audit-log">
+        <div className="compact-activity">
           <h3><FaHistory /> Recent Activity</h3>
-          <div className="log-list">
-            {adminNotifs.map((n, i) => (
-              <div key={i} className="log-item">
-                <span className="log-msg">{n.message}</span>
-                <span className="log-time">{new Date(n.date).toLocaleTimeString()}</span>
+          <div className="activity-list">
+            {adminNotifs.slice(0, 3).map((n, i) => (
+              <div key={i} className="activity-item">
+                <span className="activity-msg">{n.message}</span>
+                <span className="activity-time">{new Date(n.date).toLocaleTimeString()}</span>
               </div>
             ))}
           </div>
         </div>
       )}
 
-      {/* BULK ACTIONS */}
-      <div className="bulk-controls">
-        <select value={bulkAction} onChange={e => setBulkAction(e.target.value)}>
-          <option value="">Bulk Action</option>
-          <option value="delete">Delete Users</option>
-          <option value="updateBalance">Update Balance</option>
-        </select>
-
-        {bulkAction === 'updateBalance' && (
-          <div className="balance-inputs">
-            <input placeholder="Checking +" value={bulkBalance.checking} onChange={e => setBulkBalance({...bulkBalance, checking: e.target.value})} />
-            <input placeholder="Savings +" value={bulkBalance.savings} onChange={e => setBulkBalance({...bulkBalance, savings: e.target.value})} />
-            <input placeholder="USDT +" value={bulkBalance.usdt} onChange={e => setBulkBalance({...bulkBalance, usdt: e.target.value})} />
-          </div>
-        )}
-
-        <button onClick={handleBulk} disabled={!bulkAction || selected.length === 0} className="apply-btn">
-          Apply to {selected.length} user{selected.length !== 1 ? 's' : ''}
-        </button>
-      </div>
-
-      {/* USERS TABLE */}
-      <div className="table-card">
-        <div className="table-header">
-          <h3>Users ({users.length})</h3>
-          <div className="select-all">
-            <input type="checkbox" checked={selected.length === users.length && users.length > 0} onChange={toggleSelectAll} />
-            <span>Select All</span>
+      {/* PENDING DEPOSITS - MOVED AFTER HEADER */}
+      {pendingDeposits.length > 0 && (
+        <div className="pending-deposits-card">
+          <h3><FaUserShield /> Pending Deposits ({pendingDeposits.length})</h3>
+          <div className="deposit-list">
+            {pendingDeposits.map(tx => (
+              <div key={tx._id} className="deposit-item">
+                <div>
+                  <strong>{tx.userId?.name || 'Unknown'}</strong> • ${tx.amount.toLocaleString()} • {tx.method}
+                  {tx.receipt && (
+                    <a href={`${API}${tx.receipt}`} target="_blank" rel="noopener noreferrer">
+                      View Receipt
+                    </a>
+                  )}
+                </div>
+                <div className="deposit-actions">
+                  <button onClick={() => handleDepositAction(tx._id, 'confirm')} className="confirm-btn">
+                    Confirm
+                  </button>
+                  <button onClick={() => handleDepositAction(tx._id, 'reject')} className="reject-btn">
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
-
-        <div className="table-wrapper">
-          <table className="admin-table">
-            <thead>
-              <tr>
-                <th></th>
-                <th>User</th>
-                <th>Email</th>
-                <th>Checking</th>
-                <th>Savings</th>
-                <th>USDT</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {users.map(u => (
-                <tr key={u._id} className={selected.includes(u._id) ? 'selected' : ''}>
-                  <td><input type="checkbox" checked={selected.includes(u._id)} onChange={() => toggleSelect(u._id)} /></td>
-                  <td className="user-name">
-                    <div className="avatar">{u.name.charAt(0).toUpperCase()}</div>
-                    {u.name}
-                  </td>
-                  <td>{u.email}</td>
-                  <td className="amount">${(u.balance?.checking || 0).toLocaleString()}</td>
-                  <td className="amount">${(u.balance?.savings || 0).toLocaleString()}</td>
-                  <td className="amount">${(u.balance?.usdt || 0).toLocaleString()}</td>
-                  <td className="actions">
-                    <button onClick={() => openBalanceEdit(u)} className="edit-btn" title="Edit Balance"><FaEdit /></button>
-                    <button onClick={() => openTx(u)} className="view-btn" title="Transactions"><FaEye /></button>
-                    <button onClick={() => viewDocuments(u)} className="docs-btn" title="View Documents"><FaFileCsv /></button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="pagination">
-          <button onClick={() => fetchUsers(search, page - 1)} disabled={page === 1}>Previous</button>
-          <span>Page {page} of {totalPages}</span>
-          <button onClick={() => fetchUsers(search, page + 1)} disabled={page === totalPages}>Next</button>
-        </div>
-      </div>
+      )}
 
       {/* BALANCE EDIT MODAL */}
       {editBal && (
