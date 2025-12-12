@@ -81,8 +81,12 @@
   background: linear-gradient(90deg, #FBBF24, var(--gold));
 }
 
-@media (max-width: 576px) {
-  .admin-login { padding: 1rem; }
+@media (max-width: 768px) {
+
+  .admin-login { padding: 1rem; 
+    margin-left: 0rem!important; /* Override main-content margin */
+    width: 100% 
+  }
   .admin-login h2 { font-size: 1.6rem; }
   .login-card { padding: 1.5rem; }
 }
