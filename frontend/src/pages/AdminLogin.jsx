@@ -15,7 +15,7 @@ function AdminLogin() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-  const { setToken, setIsAdmin } = useAuth();
+  const { setToken, setIsAdmin, fetchUser } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -36,8 +36,12 @@ function AdminLogin() {
       localStorage.setItem('isAdmin', 'true');
       setToken(token);
       setIsAdmin(true);
+
+      // Wait for user data to be fetched before navigating
+      await fetchUser();
+
       setSuccess('Admin login successful!');
-      setTimeout(() => navigate('/admin/dashboard'), 100);
+      setTimeout(() => navigate('/admin/dashboard'), 500);
     } catch (err) {
       console.error('Admin login error:', err.response?.data?.message, err.message);
       setError(err.response?.data?.message || 'Admin login failed');
