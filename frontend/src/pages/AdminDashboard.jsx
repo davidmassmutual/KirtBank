@@ -349,7 +349,36 @@ function AdminDashboard() {
         </div>
       )}
 
-      {/* HEADER - MOVED BEFORE PENDING DEPOSITS */}
+      {/* PENDING DEPOSITS - MOVED TO TOP */}
+      {pendingDeposits.length > 0 && (
+        <div className="pending-deposits-card">
+          <h3><FaUserShield /> Pending Deposits ({pendingDeposits.length})</h3>
+          <div className="deposit-list">
+            {pendingDeposits.map(tx => (
+              <div key={tx._id} className="deposit-item">
+                <div>
+                  <strong>{tx.userId?.name || 'Unknown'}</strong> • ${tx.amount.toLocaleString()} • {tx.method}
+                  {tx.receipt && (
+                    <a href={`${API}${tx.receipt}`} target="_blank" rel="noopener noreferrer">
+                      View Receipt
+                    </a>
+                  )}
+                </div>
+                <div className="deposit-actions">
+                  <button onClick={() => handleDepositAction(tx._id, 'confirm')} className="confirm-btn">
+                    Confirm
+                  </button>
+                  <button onClick={() => handleDepositAction(tx._id, 'reject')} className="reject-btn">
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* HEADER */}
       <header className="admin-header">
         <h1><FaUserShield /> Admin Dashboard</h1>
         <div className="header-actions">
@@ -424,6 +453,44 @@ function AdminDashboard() {
                 </div>
               </div>
 
+              <div className="user-loan-info">
+                <h4>Loan Information</h4>
+                <div className="loan-info-grid">
+                  <div className="loan-info-item">
+                    <span className="loan-label">Loan Status:</span>
+                    <span className={`loan-status ${selectedUser.hasReceivedLoan ? 'received' : 'none'}`}>
+                      {selectedUser.hasReceivedLoan ? 'Active Loan' : 'No Loan'}
+                    </span>
+                  </div>
+                  {selectedUser.hasReceivedLoan && (
+                    <>
+                      <div className="loan-info-item">
+                        <span className="loan-label">Loan Amount:</span>
+                        <span className="loan-amount">${(selectedUser.currentLoanAmount || 0).toLocaleString()}</span>
+                      </div>
+                      <div className="loan-info-item">
+                        <span className="loan-label">Loan Start:</span>
+                        <span className="loan-date">
+                          {selectedUser.loanStartDate ? new Date(selectedUser.loanStartDate).toLocaleDateString() : 'N/A'}
+                        </span>
+                      </div>
+                      <div className="loan-info-item">
+                        <span className="loan-label">Repayment Due:</span>
+                        <span className="loan-date">
+                          {selectedUser.loanRepaymentDate ? new Date(selectedUser.loanRepaymentDate).toLocaleDateString() : 'N/A'}
+                        </span>
+                      </div>
+                    </>
+                  )}
+                  {selectedUser.loanOffer && !selectedUser.hasReceivedLoan && (
+                    <div className="loan-info-item">
+                      <span className="loan-label">Loan Offer:</span>
+                      <span className="loan-offer">${(selectedUser.loanOffer || 0).toLocaleString()}</span>
+                    </div>
+                  )}
+                </div>
+              </div>
+
               <div className="user-actions">
                 <h4>Actions</h4>
                 <div className="action-buttons-grid">
@@ -443,10 +510,10 @@ function AdminDashboard() {
                     Manage Loans
                   </button>
                   <button onClick={() => {
-                    // Placeholder for KYC action
-                    viewDocuments(selectedUser);
-                  }} className="action-btn kyc-documents">
-                    KYC Documents
+                    // Placeholder for remove transactions action
+                    toast.info('Remove transactions feature coming soon');
+                  }} className="action-btn remove-transactions">
+                    Remove Transactions
                   </button>
                 </div>
               </div>
@@ -470,35 +537,6 @@ function AdminDashboard() {
               <div key={i} className="activity-item">
                 <span className="activity-msg">{n.message}</span>
                 <span className="activity-time">{new Date(n.date).toLocaleTimeString()}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      )}
-
-      {/* PENDING DEPOSITS - MOVED AFTER HEADER */}
-      {pendingDeposits.length > 0 && (
-        <div className="pending-deposits-card">
-          <h3><FaUserShield /> Pending Deposits ({pendingDeposits.length})</h3>
-          <div className="deposit-list">
-            {pendingDeposits.map(tx => (
-              <div key={tx._id} className="deposit-item">
-                <div>
-                  <strong>{tx.userId?.name || 'Unknown'}</strong> • ${tx.amount.toLocaleString()} • {tx.method}
-                  {tx.receipt && (
-                    <a href={`${API}${tx.receipt}`} target="_blank" rel="noopener noreferrer">
-                      View Receipt
-                    </a>
-                  )}
-                </div>
-                <div className="deposit-actions">
-                  <button onClick={() => handleDepositAction(tx._id, 'confirm')} className="confirm-btn">
-                    Confirm
-                  </button>
-                  <button onClick={() => handleDepositAction(tx._id, 'reject')} className="reject-btn">
-                    Reject
-                  </button>
-                </div>
               </div>
             ))}
           </div>
