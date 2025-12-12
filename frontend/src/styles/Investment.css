@@ -1,0 +1,317 @@
+/* src/styles/Investment.css - Ultra-Premium Vibrant Redesign */
+
+.investments-page {
+  min-height: 100vh;
+  padding: 2rem 1rem;
+  color: var(--text);
+  position: relative;
+  overflow-x: hidden;
+}
+
+
+
+.investments-container {
+  max-width: 1400px;
+  margin: 0 auto;
+  position: relative;
+  z-index: 1;
+}
+
+/* Investment Hero Section - More Vibrant Overlay */
+.investment-heroes {
+  text-align: center;
+  border-radius: 32px;
+}
+
+/* Summary Cards - Colorful Borders & Glow */
+.summary-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.summary-card {
+  padding: 3rem 2rem;
+  border-radius: 28px;
+  text-align: center;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border: 2px solid rgba(255, 193, 7, 0.4);
+  transition: all 0.5s ease;
+}
+
+.summary-card:hover {
+  transform: translateY(-10px);
+  box-shadow: 
+    0 30px 60px rgba(255, 193, 7, 0.3),
+    0 0 40px rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.5);
+}
+
+.summary-label {
+  font-size: 1.1rem;
+  color: var(--text);
+  opacity: 0.7;
+  margin-bottom: 1rem;
+  font-weight: 500;
+}
+
+.summary-value {
+  font-size: 3rem;
+  font-weight: 900;
+  color: var(--navy);
+}
+
+/* Section Titles - Vibrant Underline */
+.section-title {
+  font-size: 2.8rem;
+  font-weight: 800;
+  color: var(--text);
+  text-align: center;
+  margin: 4rem 0 3rem;
+}
+
+.section-title::after {
+  content: '';
+  display: block;
+  width: 140px;
+  height: 6px;
+  background: linear-gradient(90deg, var(--gold), var(--navy-light), var(--success));
+  margin: 1.5rem auto 0;
+  border-radius: 3px;
+}
+
+/* Plans Grid */
+.plans-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(360px, 1fr));
+  gap: 3rem;
+  margin-bottom: 5rem;
+}
+
+.plan-card {
+  border-radius: 28px;
+  overflow: hidden;
+  background: linear-gradient(145deg, var(--card-bg) 0%, rgba(31, 41, 55, 0.02) 100%);
+  backdrop-filter: blur(20px);
+  border: 2px solid transparent;
+  background-clip: padding-box;
+  background-image:
+    linear-gradient(var(--card-bg), var(--card-bg)),
+    linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--secondary) 100%);
+  background-origin: padding-box, border-box;
+  box-shadow:
+    0 15px 40px rgba(31, 41, 55, 0.15),
+    inset 0 0 30px rgba(31, 41, 55, 0.08);
+  transition: all 0.5s ease;
+  position: relative;
+}
+
+.plan-header {
+  background: linear-gradient(145deg, var(--navy) 0%, var(--navy-light) 50%, var(--secondary) 100%);
+  padding: 2.5rem 1.5rem;
+  text-align: center;
+  color: white;
+  position: relative;
+  overflow: hidden;
+}
+
+.plan-name {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 0.8rem;
+  letter-spacing: 1px;
+}
+
+.plan-roi {
+  font-size: 3.5rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.roi-label {
+  font-size: 1rem;
+  opacity: 0.95;
+  display: block;
+  margin-top: 0.3rem;
+}
+
+.plan-header::after {
+  content: '';
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--info), var(--success), var(--gold));
+  opacity: 0.7;
+}
+
+.plan-body {
+  padding: 2rem 1.5rem;
+  text-align: center;
+}
+
+.plan-term {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.plan-range {
+  font-size: 1.15rem;
+  color: var(--text);
+  opacity: 0.85;
+  margin-bottom: 2rem;
+}
+
+/* Gold Button - Untouched as requested */
+.invest-btn {
+  width: 100%;
+  padding: 1.3rem;
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #1a1a1a;
+  border: none;
+  border-radius: 16px;
+  font-size: 1.2rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.4s ease;
+  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
+}
+
+.invest-btn:hover {
+  transform: translateY(-5px) scale(1.03);
+  background: linear-gradient(135deg, var(--gold-dark), var(--gold));
+  box-shadow: 0 15px 35px rgba(255, 193, 7, 0.5);
+}
+
+/* Active Investments - Vibrant Accents */
+.active-grid {
+  display: grid;
+  gap: 2.5rem;
+}
+
+.active-card {
+  border-radius: 28px;
+  padding: 3rem;
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  border-left: 10px solid var(--gold);
+  border: 2px solid rgba(255, 193, 7, 0.25);
+  box-shadow: 
+    0 15px 35px rgba(0, 0, 0, 0.12),
+    inset 0 0 25px rgba(16, 185, 129, 0.05);
+  transition: all 0.5s ease;
+}
+
+.active-card:hover {
+  transform: translateX(12px);
+  box-shadow: 
+    0 25px 50px rgba(255, 193, 7, 0.25),
+    0 0 40px rgba(16, 185, 129, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+}
+
+.active-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.active-plan {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.active-status {
+  background: var(--success);
+  color: white;
+  padding: 0.5rem 1.2rem;
+  border-radius: 30px;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+
+.active-maturity {
+  color: var(--text);
+  opacity: 0.8;
+  margin-bottom: 1.5rem;
+  font-size: 1.05rem;
+}
+
+.active-progress-container {
+  height: 12px;
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 2rem;
+  box-shadow: inset 0 2px 8px rgba(0,0,0,0.2);
+}
+
+.progress-bar {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), var(--success));
+  border-radius: 6px;
+  box-shadow: 
+    0 0 20px rgba(255, 193, 7, 0.6),
+    0 0 30px rgba(16, 185, 129, 0.4);
+  transition: width 0.6s ease;
+}
+
+.active-amounts {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.amount-label {
+  font-size: 0.95rem;
+  color: var(--text);
+  opacity: 0.7;
+  margin-bottom: 0.4rem;
+}
+
+.amount-value {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.amount-profit {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--success);
+}
+
+.profit-section {
+  text-align: right;
+}
+
+/* Loading & Responsive */
+.loading-text {
+  grid-column: 1 / -1;
+  text-align: center;
+  font-size: 1.4rem;
+  color: var(--text);
+  opacity: 0.7;
+  padding: 4rem;
+}
+
+@media (max-width: 768px) {
+  .investment-heroes { padding: 4rem 1.5rem; }
+  .hero-title { font-size: 3rem; }
+  .summary-value { font-size: 2.5rem; }
+  .plan-roi { font-size: 4rem; }
+  .plans-grid { grid-template-columns: 1fr; }
+  .active-amounts { flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+  .profit-section { text-align: left; }
+  .section-title { font-size: 2.4rem; }
+}
+
+@media (max-width: 480px) {
+  .investment-heroes { padding: 3rem 1rem; }
+  .plan-header { fourpadding: 3rem 1.5rem; }
+}

@@ -1,0 +1,58 @@
+.support {
+ padding: 2rem 0rem 4rem;
+ animation: fadeIn 0.7s ease-in;
+ min-height: calc(100vh - 80px);
+ margin-top: 2rem;
+}
+
+.support h2 {
+ font-weight: 700;
+ color: var(--text);
+ margin-bottom: 1.5rem;
+ display: flex;
+ justify-content: center;
+}
+
+.support button {
+ padding: 1rem;
+ background: linear-gradient(90deg, var(--accent), #FBBF24);
+ color: var(--text);
+ border: none;
+ border-radius: 10px;
+ font-weight: 600;
+ box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.support button:hover {
+ background: linear-gradient(90deg, #FBBF24, var(--accent));
+}
+
+.support button i {
+ margin-right: 0.5rem;
+}
+
+/* Phone */
+@media (max-width: 576px) {
+ .support {
+ padding: 2rem 1rem 6rem;
+ min-height: calc(100vh - 60px);
+ }
+ .support button {
+ padding: 0.8rem;
+ }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+ .support {
+ padding: 3rem 1.5rem 7rem;
+ min-height: calc(100vh - 70px);
+ }
+}
+
+/* Laptop */
+@media (min-width: 769px) {
+ .support {
+ padding: 4rem 2rem 8rem;
+ }
+}

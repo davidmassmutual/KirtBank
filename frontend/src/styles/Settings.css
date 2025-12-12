@@ -1,0 +1,257 @@
+/* frontend/src/styles/Settings.css */
+:root {
+  --gold: #D4AF37;
+  --navy: #1F2937;
+  --background: #F9FAFB;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text: #1F2937;
+  --highlight: #D4AF37;
+  --error: #EF4444;
+}
+
+.settings {
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.settings h2 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+  display: flex;
+  justify-content: center;
+  text-align: center;
+  gap: 0.5rem;
+}
+
+.settings-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.settings-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--highlight);
+}
+
+.settings-card h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+/* Profile Image Section */
+.profile-image-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  padding: 1.5rem;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 12px;
+  border: 1px solid rgba(212, 175, 55, 0.2);
+}
+
+.profile-image-container {
+  position: relative;
+}
+
+.profile-image-display,
+.profile-image-placeholder {
+  width: 100px;
+  height: 100px;
+  border-radius: 50%;
+  border: 3px solid var(--gold);
+  object-fit: cover;
+}
+
+.profile-image-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(212, 175, 55, 0.1);
+  color: var(--gold);
+  font-size: 2.5rem;
+}
+
+.profile-image-controls {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.image-upload-btn,
+.image-save-btn {
+  padding: 0.6rem 1rem;
+  border: 2px solid var(--gold);
+  border-radius: 8px;
+  background: transparent;
+  color: var(--gold);
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.image-upload-btn:hover,
+.image-save-btn:hover {
+  background: var(--gold);
+  color: white;
+}
+
+.image-save-btn {
+  background: var(--gold);
+  color: white;
+}
+
+.image-save-btn:hover {
+  background: #B8860B;
+}
+
+.settings-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.settings-card label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.settings-card input,
+.settings-card textarea,
+.settings-card select {
+  padding: 0.8rem;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: var(--card-bg);
+  color: var(--text);
+  margin-top: 0.3rem;
+}
+
+.settings-card input:disabled,
+.settings-card textarea:disabled,
+.settings-card select:disabled {
+  background: #E5E7EB;
+  cursor: not-allowed;
+}
+
+.settings-card button {
+  padding: 0.8rem;
+  background: linear-gradient(90deg, var(--gold), #FBBF24);
+  color: var(--navy);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.settings-card button:disabled {
+  background: #E5E7EB;
+  cursor: not-allowed;
+}
+
+.settings-card button:hover:not(:disabled) {
+  background: linear-gradient(90deg, #FBBF24, var(--gold));
+}
+
+.settings-toggle {
+  margin-bottom: 1rem;
+}
+
+.settings-toggle label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.sessions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.session-item {
+  background: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  border: 1px solid var(--highlight);
+}
+
+.session-item p {
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.session-item span {
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.logout-session {
+  background: var(--error);
+  color: white;
+}
+
+.logout-session:hover:not(:disabled) {
+  background: #DC2626;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--gold);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: var(--text);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 576px) {
+  .settings {
+    padding: 1rem;
+  }
+  .settings h2 {
+    font-size: 1.4rem;
+  }
+  .settings-card {
+    padding: 1rem;
+  }
+  .settings-card h3 {
+    font-size: 1.2rem;
+  }
+}

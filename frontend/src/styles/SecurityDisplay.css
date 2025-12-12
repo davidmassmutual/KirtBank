@@ -1,0 +1,46 @@
+.security-display {
+  padding: 2rem 1rem;
+  background: var(--card-bg);
+  animation: fadeIn 0.7s ease-in;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.security-display h2 {
+  font-weight: 600;
+  color: var(--error);
+  margin-bottom: 1rem;
+}
+
+.security-display p {
+  font-weight: 500;
+  color: var(--text);
+}
+
+.security-display p i {
+  margin-right: 0.5rem;
+}
+
+/* Phone */
+@media (max-width: 576px) {
+  .security-display {
+    padding: 1.2rem;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .security-display {
+    padding: 1.5rem;
+  }
+}
+
+/* Laptop */
+@media (min-width: 769px) {
+  .security-display {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

@@ -1,0 +1,25 @@
+/* src/styles/QuickStats.css */
+.quick-stats {
+  display: flex;
+  justify-content: space-around;
+  padding: 1.5rem;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+}
+
+.stat {
+  text-align: center;
+}
+
+.stat span {
+  display: block;
+  font-size: 14px;
+  color: #9ca3af;
+  margin-bottom: 4px;
+}
+
+.stat strong {
+  font-size: 20px;
+  color: var(--gold);
+  font-weight: 700;
+}

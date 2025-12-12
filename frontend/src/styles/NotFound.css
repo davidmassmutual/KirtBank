@@ -1,0 +1,53 @@
+/* src/styles/NotFound.css */
+.not-found {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  background: var(--background);
+  color: var(--text);
+  text-align: center;
+  padding: 2rem;
+  animation: fadeIn 0.7s ease-in;
+}
+
+.not-found h1 {
+  font-size: 6rem;
+  font-weight: 900;
+  color: var(--primary);
+  margin: 0;
+  text-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.not-found p {
+  font-size: 1.5rem;
+  color: var(--text);
+  margin: 1rem 0 2rem;
+}
+
+.not-found a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.8rem 1.8rem;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  color: white;
+  border-radius: 50px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.not-found a:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .not-found h1 { font-size: 4rem; }
+  .not-found p { font-size: 1.2rem; }
+  .not-found a { padding: 0.7rem 1.5rem; font-size: 0.9rem; }
+}

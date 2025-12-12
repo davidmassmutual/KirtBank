@@ -1,0 +1,586 @@
+/* frontend/src/styles/VirtualCards.css */
+:root {
+  --gold: #D4AF37;
+  --navy: #1F2937;
+  --background: #F9FAFB;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text: #1F2937;
+  --highlight: #D4AF37;
+  --error: #EF4444;
+  --success: #10B981;
+  --visa-blue: #1A1F71; /* Visa brand blue */
+  --modal-bg: rgba(0, 0, 0, 0.6);
+}
+
+.virtual-cards {
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.virtual-cards h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.virtual-cards p {
+  font-size: 1rem;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+}
+
+.create-btn {
+  padding: 0.8rem 1rem;
+  background: linear-gradient(90deg, var(--gold), #FBBF24);
+  color: var(--navy);
+  border: none;
+  border-radius: 10px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.create-btn:disabled {
+  background: #E5E7EB;
+  cursor: not-allowed;
+}
+
+.create-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #FBBF24, var(--gold));
+}
+.create-btn-physical-btn{
+  color: var(--text);
+}
+.cards-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1rem;
+}
+
+.card-item {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--highlight);
+}
+
+.card-preview {
+  margin-bottom: 1rem;
+}
+
+.visa-card {
+  position: relative;
+  width: 100%;
+  max-width: 300px;
+  height: 180px;
+  background: linear-gradient(15deg, var(--secondary), #dddfe5);
+  border-radius: 12px;
+  padding: 1rem;
+  color: white;
+  font-family: 'Arial', sans-serif;
+  font-weight: 500;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  margin: 0 auto;
+}
+
+.visa-logo {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 60px;
+  height: auto;
+}
+
+.card-info {
+  position: relative;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.card-info h3 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+}
+
+.card-number {
+  font-size: 1rem;
+  letter-spacing: 2px;
+  margin-bottom: 1rem;
+}
+
+.card-details {
+  display: flex;
+  justify-content: space-between;
+}
+
+.card-details p {
+  font-size: 0.9rem;
+}
+
+.card-actions {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.card-actions button {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 10px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.card-actions button:first-child {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.card-actions button:nth-child(2) {
+  background: var(--gold);
+  color: var(--navy);
+}
+
+.card-actions button:last-child {
+  background: var(--error);
+  color: white;
+}
+
+.card-actions button:disabled {
+  background: #E5E7EB;
+  cursor: not-allowed;
+}
+
+.card-actions button:hover:not(:disabled) {
+  opacity: 0.9;
+}
+
+.loading-container {
+  text-align: center;
+  padding: 2rem;
+}
+
+.loading-spinner {
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid var(--gold);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto;
+}
+
+.loading-message {
+  margin-top: 1rem;
+  color: var(--text);
+}
+
+/* Card Options Section */
+.card-options {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+}
+
+.card-options .create-btn {
+  margin-bottom: 0;
+  min-width: 200px;
+  justify-content: center;
+}
+
+.virtual-btn {
+  background: linear-gradient(90deg, var(--visa-blue), #2D4A8A) !important;
+  color: white !important;
+}
+
+.virtual-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #2D4A8A, var(--visa-blue)) !important;
+}
+
+.physical-btn {
+  background: var(--gold) !important;
+  color: var(--text) !important;
+}
+
+.physical-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #F59E0B, var(--gold)) !important;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--modal-bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  backdrop-filter: blur(5px);
+}
+
+.modal {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 2rem;
+  max-width: 500px;
+  width: 90%;
+  max-height: 90vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  border: 2px solid var(--highlight);
+}
+
+.modal.large {
+  max-width: 700px;
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--highlight);
+}
+
+.modal-header h3 {
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: var(--text);
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.close-btn {
+  background: var(--error);
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.close-btn:hover {
+  background: #DC2626;
+  transform: scale(1.1);
+}
+
+/* Physical Card Modal */
+.physical-form-modal {
+  max-width: 600px;
+}
+
+.physical-info {
+  background: linear-gradient(135deg, var(--gold), #F59E0B);
+  color: var(--navy);
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.physical-info p {
+  margin: 0.5rem 0;
+  font-weight: 600;
+}
+
+.physical-info strong {
+  color: var(--navy);
+}
+
+/* Shipping Form */
+.shipping-form {
+  margin-top: 1rem;
+}
+
+.shipping-form h4 {
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 0.8rem;
+  border: 2px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--highlight);
+  box-shadow: 0 0 0 3px rgba(212, 175, 55, 0.1);
+}
+
+.form-row {
+  display: flex;
+  gap: 1rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+/* Form Actions */
+.form-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 2rem;
+  flex-wrap: wrap;
+}
+
+.form-actions button {
+  padding: 1rem 2rem;
+  border: none;
+  border-radius: 12px;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  min-width: 150px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.order-btn {
+  background: linear-gradient(90deg, var(--success), #059669);
+  color: white;
+  box-shadow: 0 4px 15px rgba(16, 185, 129, 0.3);
+}
+
+.order-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #059669, var(--success));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.4);
+}
+
+.cancel-btn {
+  background: linear-gradient(90deg, #6B7280, #4B5563);
+  color: white;
+  box-shadow: 0 4px 15px rgba(107, 114, 128, 0.3);
+}
+
+.cancel-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #4B5563, #6B7280);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(107, 114, 128, 0.4);
+}
+
+.form-actions button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+/* Card Header */
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.card-type-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.card-type-badge.virtual {
+  background: linear-gradient(90deg, var(--visa-blue), #2D4A8A);
+  color: white;
+}
+
+.card-type-badge.physical {
+  background: var(--navy) !important;
+  color: white;
+}
+
+.status-badge {
+  padding: 0.4rem 0.8rem;
+  border-radius: 20px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.active {
+  background: linear-gradient(90deg, var(--success), #059669);
+  color: white;
+}
+
+.status-badge.frozen {
+  background: linear-gradient(90deg, #3B82F6, #1D4ED8);
+  color: white;
+}
+
+.status-badge.ordered,
+.status-badge.processing,
+.status-badge.shipped {
+  background: linear-gradient(90deg, var(--gold), #F59E0B);
+  color: var(--navy);
+}
+
+.status-badge.delivered {
+  background: linear-gradient(90deg, var(--success), #059669);
+  color: white;
+}
+
+.status-badge.deleted {
+  background: linear-gradient(90deg, var(--error), #DC2626);
+  color: white;
+}
+
+/* Shipping Info */
+.shipping-info {
+  background: #F8FAFC;
+  padding: 1rem;
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  border-left: 4px solid var(--success);
+}
+
+.shipping-info h4 {
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.shipping-info p {
+  margin: 0.3rem 0;
+  font-size: 0.9rem;
+  color: var(--text);
+}
+
+.shipping-info strong {
+  color: var(--navy);
+}
+
+/* No Cards Message */
+.no-cards {
+  text-align: center;
+  padding: 2rem;
+  color: #6B7280;
+}
+
+.no-cards p {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+/* Copy Button */
+.copy-btn {
+  background: var(--success) !important;
+  color: white !important;
+  border: none !important;
+  border-radius: 4px !important;
+  padding: 0.2rem 0.4rem !important;
+  font-size: 0.8rem !important;
+  cursor: pointer !important;
+  margin-left: 0.5rem !important;
+  transition: all 0.3s ease !important;
+}
+
+.copy-btn:hover {
+  background: #059669 !important;
+  transform: scale(1.1) !important;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+@media (max-width: 576px) {
+  .virtual-cards {
+    padding: 1rem;
+  }
+  .virtual-cards h2 {
+    font-size: 1.4rem;
+  }
+  .card-item {
+    padding: 1rem;
+  }
+  .visa-card {
+    max-width: 250px;
+    height: 150px;
+  }
+  .card-info h3 {
+    font-size: 1rem;
+  }
+  .card-number {
+    font-size: 0.9rem;
+  }
+  .card-details p {
+    font-size: 0.8rem;
+  }
+  .card-actions {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    gap: 0.2rem;
+    -webkit-overflow-scrolling: touch;
+  }
+  .card-actions button {
+    padding: 0.6rem;
+    font-size: 0.8rem;
+    min-width: fit-content;
+    flex-shrink: 0;
+  }
+}

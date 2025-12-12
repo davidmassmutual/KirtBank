@@ -1,0 +1,38 @@
+/* src/styles/InvestmentCard.css */
+.investment-mini-card {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border-radius: 16px;
+  text-decoration: none;
+  color: var(--text);
+  transition: all 0.3s;
+}
+
+.investment-mini-card:hover {
+  transform: translateX(8px);
+}
+
+.investment-mini-card .icon {
+  font-size: 32px;
+  color: var(--gold);
+}
+
+.investment-mini-card h4 {
+  margin: 0;
+  font-size: 16px;
+  color: var(--text);
+}
+
+.investment-mini-card p {
+  margin: 4px 0 0;
+  font-size: 14px;
+  color: #9ca3af;
+}
+
+.arrow {
+  margin-left: auto;
+  font-size: 20px;
+  color: var(--gold);
+}

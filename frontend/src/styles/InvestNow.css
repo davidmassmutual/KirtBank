@@ -1,0 +1,359 @@
+/* src/styles/InvestNow.css */
+.investnow-container {
+  max-width: 500px;
+  margin: 2rem auto;
+  padding: 1.5rem;
+  min-height: calc(100vh - 120px);
+  display: flex;
+  justify-content: center;
+  font-family: 'Inter', sans-serif;
+}
+
+.investnow-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 28px;
+  padding: 2.5rem;
+  width: 100%;
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow: 
+    0 25px 50px rgba(0, 0, 0, 0.2),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.investnow-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--gold), var(--gold-dark));
+  border-radius: 28px 28px 0 0;
+}
+
+/* HEADER */
+.investnow-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.plan-title {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--secondary);
+  margin: 0;
+  letter-spacing: -0.5px;
+}
+
+.plan-subtitle {
+  color: #9ca3af;
+  font-size: 1rem;
+  margin: 0.5rem 0 0;
+  font-weight: 500;
+}
+
+.plan-badge {
+  background: rgba(255, 193, 7, 0.15);
+  color: var(--gold);
+  padding: 0.5rem 1rem;
+  border-radius: 50px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 193, 7, 0.3);
+}
+
+.badge-text {
+  font-weight: 700;
+}
+
+.badge-term {
+  color: #cbd5e1;
+}
+
+/* FORM */
+.invest-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.amount-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-label {
+  font-weight: 600;
+  color: var(--secondary);
+  margin-bottom: 0.75rem;
+  font-size: 1.05rem;
+}
+
+.amount-input-wrapper {
+  position: relative;
+}
+
+.currency {
+  position: absolute;
+  left: 1.25rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--gold);
+  pointer-events: none;
+  z-index: 10;
+}
+
+.amount-input {
+  width: 100%;
+  padding: 1.25rem 1.25rem 1.25rem 3rem;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.08);
+  color: var(--secondary);
+  font-size: 1.5rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.amount-input::placeholder {
+  color: #64748b;
+  font-weight: 500;
+}
+
+.amount-input:focus {
+  outline: none;
+  border-color: var(--gold);
+  background: rgba(255, 255, 255, 0.12);
+  box-shadow: 
+    0 0 0 4px rgba(255, 193, 7, 0.2),
+    0 8px 25px rgba(0, 0, 0, 0.15);
+  transform: translateY(-1px);
+}
+
+.input-hint {
+  margin-top: 0.5rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* PROFIT CALCULATOR */
+.profit-calculator {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(12px);
+}
+
+.calc-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.75rem 0;
+  border-bottom: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+.calc-row:last-child {
+  border-bottom: none;
+  padding-bottom: 0;
+  margin-top: 0.5rem;
+}
+
+.calc-label {
+  color: #cbd5e1;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.calc-value {
+  color: var(--secondary);
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.text-gold .calc-value {
+  color: var(--gold);
+  font-size: 1.3rem;
+}
+
+.total-return {
+  background: rgba(255, 193, 7, 0.08);
+  margin: 0.75rem -1.5rem -1.5rem;
+  padding: 1rem 1.5rem;
+  border-radius: 0 0 20px 20px;
+  border-top: 1px solid rgba(255, 193, 7, 0.2);
+}
+
+.total-return .calc-label {
+  font-weight: 600;
+  color: var(--gold);
+}
+
+.total-return .calc-value {
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--gold);
+}
+
+.calc-footer {
+  text-align: center;
+  margin-top: 1rem;
+  color: #94a3b8;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* CONFIRM BUTTON */
+.confirm-btn {
+  background: linear-gradient(135deg, #94a3b8, #64748b);
+  color: #1e293b;
+  border: none;
+  padding: 1.25rem;
+  border-radius: 18px;
+  font-weight: 700;
+  font-size: 1.1rem;
+  cursor: not-allowed;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.75rem;
+  transition: all 0.4s ease;
+  margin-top: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.confirm-btn.active {
+  background: linear-gradient(135deg, var(--gold), var(--gold-dark));
+  color: #1a1a1a;
+  cursor: pointer;
+  box-shadow: 0 12px 30px rgba(255, 193, 7, 0.35);
+}
+
+.confirm-btn.active:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 20px 40px rgba(255, 193, 7, 0.45);
+}
+
+.confirm-btn.active::before {
+  content: '';
+  position: absolute;
+  top: 0; left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+  transition: 0.7s;
+}
+
+.confirm-btn.active:hover::before {
+  left: 100%;
+}
+
+.arrow-icon {
+  width: 20px;
+  height: 20px;
+  transition: transform 0.3s;
+}
+
+.confirm-btn.active:hover .arrow-icon {
+  transform: translateX(4px);
+}
+
+/* TERMS */
+.terms-note {
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 16px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.terms-note p {
+  color: #fca5a5;
+  font-size: 0.85rem;
+  margin: 0;
+  line-height: 1.5;
+}
+/* Add to InvestNow.css */
+
+/* INSUFFICIENT BALANCE ALERT */
+.insufficient-alert {
+  background: linear-gradient(135deg, rgba(239, 68, 68, 0.15), rgba(220, 38, 38, 0.1));
+  border: 1px solid rgba(239, 68, 68, 0.4);
+  border-radius: 20px;
+  padding: 1.25rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  backdrop-filter: blur(12px);
+  animation: slideDown 0.4s ease-out;
+}
+
+@keyframes slideDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.alert-icon {
+  width: 24px;
+  height: 24px;
+  color: #fca5a5;
+  flex-shrink: 0;
+}
+
+.alert-text {
+  color: #fca5a5;
+  font-size: 0.95rem;
+  font-weight: 500;
+  flex: 1;
+  margin: 0;
+}
+
+.alert-btn {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  color: white;
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
+  font-weight: 600;
+  font-size: 0.9rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+.alert-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(239, 68, 68, 0.4);
+}
+
+/* RESPONSIVE */
+@media (max-width: 640px) {
+  .investnow-container { padding: 1rem; margin: 1rem auto; }
+  .investnow-card { padding: 2rem; border-radius: 24px; }
+  .plan-title { font-size: 1.9rem; }
+  .amount-input { font-size: 1.3rem; padding: 1rem 1rem 1rem 2.75rem; }
+  .currency { font-size: 1.3rem; left: 1rem; }
+  .confirm-btn { padding: 1.1rem; font-size: 1rem; }
+}
+
+@media (max-width: 480px) {
+  .investnow-header { flex-direction: column; align-items: flex-start; }
+  .plan-badge { align-self: flex-end; }
+}

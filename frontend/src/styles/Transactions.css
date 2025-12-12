@@ -1,0 +1,175 @@
+/* src/styles/Transactions.css */
+.transactions-page {
+  margin-top: 2rem;
+  padding: 2rem;
+  min-height: 100vh;
+  color: var(--text);
+}
+
+.page-header {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+.page-header h1 {
+  font-size: 2.2rem;
+  font-weight: 700;
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+}
+
+.header-actions {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: var(--card-bg);
+  border-radius: 50px;
+  padding: 0.5rem 1rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  min-width: 280px;
+}
+
+.search-bar svg {
+  color: var(--secondary);
+  margin-right: 0.5rem;
+}
+
+.search-bar input {
+  border: none;
+  background: none;
+  outline: none;
+  flex: 1;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+.filter-select, .export-btn {
+  padding: 0.7rem 1.2rem;
+  border: none;
+  border-radius: 50px;
+  background: var(--card-bg);
+  color: var(--text);
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  transition: all 0.3s ease;
+}
+
+.export-btn:hover, .filter-select:hover {
+  background: var(--primary);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.transactions-list {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.transaction-card {
+  background: var(--card-bg);
+  border-radius: 16px;
+  padding: 1.2rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.transaction-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  border-color: var(--primary);
+}
+
+.transaction-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+  flex-shrink: 0;
+}
+
+.icon.deposit { background: rgba(16, 185, 129, 0.15); color: #10B981; }
+.icon.withdraw { background: rgba(239, 68, 68, 0.15); color: #EF4444; }
+.icon.transfer { background: rgba(59, 130, 246, 0.15); color: #3B82F6; }
+.icon.payment { background: rgba(147, 51, 234, 0.15); color: #9333EA; }
+.icon.default { background: rgba(251, 191, 36, 0.15); color: #FBBF24; }
+
+.transaction-details h3 {
+  margin: 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.transaction-details p {
+  margin: 0.3rem 0 0;
+  font-size: 0.85rem;
+  color: var(--secondary);
+}
+
+.transaction-amount {
+  margin-left: auto;
+  font-size: 1.2rem;
+  font-weight: 600;
+}
+
+.status-badge {
+  padding: 0.4rem 0.9rem;
+  border-radius: 50px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.status-badge.posted { background: rgba(16, 185, 129, 0.2); color: #10B981; }
+.status-badge.pending { background: rgba(251, 191, 36, 0.2); color: #FBBF24; }
+.status-badge.failed { background: rgba(239, 68, 68, 0.2); color: #EF4444; }
+
+.empty-state {
+  text-align: center;
+  padding: 4rem 2rem;
+  color: var(--secondary);
+}
+
+.empty-icon {
+  font-size: 3rem;
+  color: var(--highlight);
+  margin-bottom: 1rem;
+}
+
+/* Mobile */
+@media (max-width: 768px) {
+  .page-header { text-align: center; }
+  .header-actions { flex-direction: column; align-items: center; }
+  .search-bar { min-width: 100%; }
+  .transaction-card { flex-direction: column; text-align: center; }
+  .transaction-amount { margin: 0.5rem 0; }
+}

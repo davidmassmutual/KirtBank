@@ -1,0 +1,603 @@
+/* frontend/src/styles/Loans.css */
+:root {
+  --gold: #D4AF37;
+  --navy: #1F2937;
+  --background: #F9FAFB;
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --text: #1F2937;
+  --highlight: #D4AF37;
+  --error: #EF4444;
+  --success: #10B981;
+  --accent: #FBBF24;
+}
+
+.loan-page {
+  margin-top: 2rem;
+  min-height: 100vh;
+  padding: 1rem 1rem;
+}
+
+.loan-banner {
+  padding: 2rem 1rem;
+  background: linear-gradient(135deg, var(--navy), #0F172A);
+  color: white;
+  text-align: center;
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+  animation: fadeIn 0.7s ease-in;
+}
+
+.loan-banner h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loan-banner button {
+  padding: 0.9rem 2rem;
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+  color: var(--navy);
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: all 0.3s ease;
+}
+
+.loan-banner button:disabled {
+  background: #9CA3AF;
+  cursor: not-allowed;
+}
+
+.loan-banner button:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+  transform: translateY(-2px);
+  box-shadow: 0 6px 12px rgba(212, 175, 55, 0.3);
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Loan Offer */
+.loan-offer {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--highlight);
+  margin-bottom: 1.5rem;
+  text-align: center;
+}
+
+.loan-offer h3 {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.loan-offer .offer-amount {
+  font-size: 2.4rem;
+  font-weight: 800;
+  color: var(--gold);
+  margin: 1rem 0;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.loan-offer p {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0.5rem 0;
+}
+
+.loan-offer button {
+  padding: 0.9rem 2rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  margin: 0.8rem auto;
+  width: 100%;
+  max-width: 300px;
+  transition: all 0.3s ease;
+}
+
+.loan-offer .accept-btn {
+  background: linear-gradient(90deg, var(--success), #34D399);
+  color: white;
+}
+
+.loan-offer .accept-btn:hover:not(:disabled) {
+  background: linear-gradient(90deg, #059669, var(--success));
+  transform: translateY(-2px);
+}
+
+.loan-offer .increase-btn {
+  background: var(--navy);
+  color: white;
+}
+
+.loan-offer .increase-btn:hover:not(:disabled) {
+  background: #111827;
+  transform: translateY(-2px);
+}
+
+/* Confirmation */
+.loan-confirmation {
+  background: linear-gradient(135deg, #ECFDF5, #D1FAE5);
+  border: 2px solid var(--success);
+  padding: 1.8rem;
+  border-radius: 12px;
+  text-align: center;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 6px 15px rgba(16, 185, 129, 0.1);
+}
+
+.loan-confirmation h3 {
+  color: var(--success);
+  font-weight: 700;
+  font-size: 1.6rem;
+}
+
+/* ID/SSN Form */
+.id-ssn-form {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--gold);
+  margin-bottom: 1.5rem;
+}
+
+.id-ssn-form h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.id-ssn-form form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+}
+
+.id-ssn-form label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.id-ssn-form input {
+  padding: 0.9rem;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  margin-top: 0.4rem;
+  transition: border 0.3s ease;
+}
+
+.id-ssn-form input:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
+}
+
+.id-ssn-form input[type="file"] {
+  padding: 0.5rem 0;
+}
+
+.id-ssn-form .form-actions {
+  display: flex;
+  gap: 0.8rem;
+  margin-top: 1rem;
+}
+
+.id-ssn-form .form-actions button {
+  flex: 1;
+  padding: 0.9rem;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.id-ssn-form .form-actions button:first-child {
+  background: linear-gradient(90deg, var(--gold), var(--accent));
+  color: var(--navy);
+}
+
+.id-ssn-form .form-actions button:first-child:hover:not(:disabled) {
+  background: linear-gradient(90deg, var(--accent), var(--gold));
+}
+
+.id-ssn-form .form-actions button:last-child {
+  background: var(--error);
+  color: white;
+}
+
+.id-ssn-form .form-actions button:last-child:hover:not(:disabled) {
+  background: #DC2626;
+}
+
+/* Repayment Calculator */
+.repayment-calculator {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--highlight);
+  margin-bottom: 1.5rem;
+}
+
+.repayment-calculator h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.repayment-calculator p {
+  font-size: 0.95rem;
+  color: #6B7280;
+  margin-bottom: 1rem;
+}
+
+.calc-inputs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.calc-inputs label {
+  display: flex;
+  flex-direction: column;
+  font-size: 1rem;
+  color: var(--text);
+  font-weight: 500;
+}
+
+.calc-inputs input,
+.calc-inputs select {
+  padding: 0.9rem;
+  border: 1px solid var(--gold);
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+  margin-top: 0.4rem;
+}
+
+.calc-inputs input:focus,
+.calc-inputs select:focus {
+  outline: none;
+  border-color: var(--navy);
+  box-shadow: 0 0 0 3px rgba(31, 41, 55, 0.1);
+}
+
+.calc-result {
+  background: #F3F4F6;
+  padding: 1.2rem;
+  border-radius: 10px;
+  text-align: center;
+  font-size: 1.3rem;
+  font-weight: 700;
+  color: var(--navy);
+  border: 2px dashed var(--gold);
+}
+
+/* FAQ */
+.faq {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  padding: 1.8rem;
+  border-radius: 12px;
+  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--highlight);
+}
+
+.faq h3 {
+  font-size: 1.4rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 1rem;
+}
+
+.faq p {
+  margin: 0.8rem 0;
+  line-height: 1.5;
+}
+
+.faq strong {
+  color: var(--navy);
+}
+
+/* Loading */
+.loading-container {
+  text-align: center;
+  padding: 3rem;
+}
+
+.loading-spinner {
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid var(--gold);
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 1rem;
+}
+
+.loading-message {
+  font-size: 1.1rem;
+  color: var(--text);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .loan-page {
+    padding: 1rem;
+  }
+  .loan-banner h2 {
+    font-size: 1.5rem;
+  }
+  .loan-offer .offer-amount {
+    font-size: 2rem;
+  }
+  .calc-inputs {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 576px) {
+  .loan-banner {
+    padding: 1.5rem 1rem;
+    margin-bottom: 1.5rem;
+  }
+  .loan-banner h2 {
+    font-size: 1.3rem;
+  }
+  .loan-offer, .id-ssn-form, .repayment-calculator, .faq {
+    padding: 1.2rem;
+  }
+  .loan-offer .offer-amount {
+    font-size: 1.8rem;
+  }
+}
+
+/* Loan Details Styling */
+.current-loan-details {
+  display: grid;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.loan-summary-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--gold);
+}
+
+.loan-summary-title {
+  text-align: center;
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin-bottom: 1.5rem;
+}
+
+.loan-info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+}
+
+.loan-info-card {
+  background: linear-gradient(135deg, rgba(255, 193, 7, 0.1), rgba(255, 255, 255, 0.8));
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid rgba(255, 193, 7, 0.3);
+  transition: all 0.3s ease;
+}
+
+.loan-info-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 15px rgba(255, 193, 7, 0.2);
+}
+
+.info-icon {
+  font-size: 2rem;
+  width: 60px;
+  height: 60px;
+  background: var(--gold);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--navy);
+  font-weight: bold;
+}
+
+.info-content {
+  flex: 1;
+}
+
+.info-content label {
+  display: block;
+  font-size: 0.9rem;
+  color: var(--secondary);
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.info-content span {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.loan-amount {
+  color: var(--success) !important;
+  font-weight: 700 !important;
+}
+
+.interest-rate {
+  color: var(--success) !important;
+  font-weight: 700 !important;
+}
+
+.repayment-date {
+  color: var(--error) !important;
+  font-weight: 700 !important;
+}
+
+.monthly-payment, .remaining-balance {
+  color: var(--gold) !important;
+  font-weight: 700 !important;
+}
+
+/* Loan Status Card */
+.loan-status-card {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid var(--navy);
+}
+
+.status-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.5rem;
+}
+
+.status-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  color: var(--navy);
+  margin: 0;
+}
+
+.status-badge.active {
+  background: linear-gradient(90deg, var(--gold), #FBBF24);
+  color: white;
+  padding: 0.6rem 1.2rem;
+  border-radius: 25px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.status-progress {
+  margin-bottom: 1.5rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #E5E7EB;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 0.5rem;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--gold), #FBBF24);
+  border-radius: 6px;
+  width: 0%;
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.9rem;
+  color: var(--secondary);
+}
+
+.status-info {
+  background: rgba(251, 191, 36, 0.1);
+  border: 1px solid rgba(251, 191, 36, 0.3);
+  border-radius: 12px;
+  padding: 1.5rem;
+}
+
+.info-alert {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.alert-icon {
+  font-size: 1.5rem;
+  flex-shrink: 0;
+}
+
+.alert-content {
+  line-height: 1.6;
+  color: var(--text);
+}
+
+.alert-content strong {
+  color: var(--navy);
+  font-weight: 700;
+}
+
+.highlight-amount {
+  color: var(--gold);
+  font-weight: 700;
+  font-size: 1.1rem;
+}
+
+.highlight-date {
+  color: var(--error);
+  font-weight: 700;
+}

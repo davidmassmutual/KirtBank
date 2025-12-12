@@ -1,0 +1,75 @@
+.transfer-payment {
+  padding: 3rem 1rem;
+  animation: fadeIn 0.7s ease-in;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+.transfer-payment form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  max-width: 450px;
+  width: 100%;
+  margin: 0 auto;
+  background: var(--card-bg);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.transfer-payment input,
+.transfer-payment select,
+.transfer-payment textarea {
+  padding: 0.9rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  font-size: 1rem;
+  color: var(--text);
+  background: white;
+  width: 100%;
+}
+
+.transfer-payment button {
+  padding: 0.9rem;
+  background: var(--gold);
+  color: var(--text);
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.transfer-payment button:hover {
+  background: linear-gradient(90deg, #FBBF24, var(--accent));
+}
+
+.transfer-payment button i {
+  margin-right: 0.5rem;
+}
+
+/* Phone */
+@media (max-width: 576px) {
+  .transfer-payment {
+    padding: 1.5rem 0.5rem;
+  }
+  .transfer-payment form {
+    padding: 1.2rem;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) {
+  .transfer-payment {
+    padding: 2rem 1rem;
+  }
+}
+
+/* Laptop */
+@media (min-width: 769px) {
+  .transfer-payment {
+    padding: 3rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+}

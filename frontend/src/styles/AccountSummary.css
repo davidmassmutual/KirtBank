@@ -1,0 +1,79 @@
+/* frontend/src/styles/AccountSummary.css */
+.account-summary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 2rem;
+  padding: 2rem 1rem;
+  margin-top: 2rem;
+}
+
+.account-summary h2 {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--secondary);
+  text-align: center;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.account-summary .FaWallet{
+  color: var(--secondary);
+}
+.balance-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+  max-width: 100%;
+  width: 100%;
+}
+
+.balance-card {
+  background: var(--card-bg);
+  border-radius: 8px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid var(--secondary);
+  text-align: center;
+}
+
+.balance-card h3 {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin-bottom: 0.5rem;
+}
+
+.balance-card p {
+  font-size: 1.3rem;
+  font-weight: 600;
+  color: var(--secondary);
+}
+
+.loading {
+  text-align: center;
+  font-size: 1rem;
+  color: var(--text);
+}
+
+@media (max-width: 768px) {
+  .account-summary {
+    padding: 0.5rem;
+  }
+
+  .account-summary h2 {
+    font-size: 1.3rem;
+  }
+
+  .balance-card {
+    padding: 0.75rem;
+  }
+
+  .balance-card h3 {
+    font-size: 1rem;
+  }
+
+  .balance-card p {
+    font-size: 1.1rem;
+  }
+}

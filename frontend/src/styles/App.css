@@ -1,0 +1,29 @@
+/* src/styles/App.css */
+.app {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* Full viewport height */
+}
+
+.main-content {
+  flex: 1 0 auto; /* Grow to fill space, push footer down */
+  margin-left: 250px; /* Offset for navbar (desktop) */
+  margin-top: 0; /* No top margin */
+  width: calc(100% - 250px); /* Adjust width for navbar */
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .main-content {
+    margin-left: 0; /* No navbar offset */
+    width: 100%;
+  }
+}
+
+/* Tablet */
+@media (max-width: 768px) and (min-width: 577px) {
+  .main-content {
+    margin-left: 200px; /* Tablet navbar width */
+    width: calc(100% - 200px);
+  }
+}

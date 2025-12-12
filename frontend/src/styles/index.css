@@ -1,0 +1,228 @@
+/* frontend/src/styles/index.css */
+:root {
+  /* Kirt Bank – Rich Gold + Deep Navy */
+  --gold: #FFC107;          /* Primary Gold (vibrant, luxurious) */
+  --gold-dark: #B8860B;     /* Deeper gold for depth */
+  --navy: #1E3A8A;          /* Deep navy – pairs perfectly with gold */
+  --navy-light: #3B82F6;    /* Lighter navy for accents */
+  
+  --primary: var(--gold);           /* Headers, buttons */
+  --accent: var(--gold-dark);       /* Hover, secondary buttons */
+  --secondary: var(--navy);         /* Cancel, subtle accents */
+  --highlight: var(--navy-light);   /* Borders, links */
+  
+  --background: #F8F9FA;    /* Light mode background */
+  --text: #1F2937;          /* Dark text */
+  --card-bg: rgba(255, 255, 255, 0.95);
+  --input-bg: #FFFFFF;
+  
+  --success: #10B981;
+  --error: #EF4444;
+}
+
+[data-theme="dark"] {
+  --primary: var(--gold);           /* Gold stays bright in dark mode */
+  --accent: var(--gold-dark);
+  --secondary: var(--navy-light);
+  --highlight: var(--gold);
+  
+  --background: #0F172A;    /* Deep slate black */
+  --text: #F1F5F9;
+  --card-bg: rgba(15, 23, 42, 0.85);
+  --input-bg: #1E293B;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  background-image: url(../images/ChatGPT\ Image\ Oct\ 17\,\ 2025\,\ 12_03_01\ PM.png);
+  background-size: cover;
+  background-attachment: fixed;
+  color: var(--text);
+  overflow-x: hidden;
+}
+
+a {
+  text-decoration: none;
+  color: var(--highlight);
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.3s ease;
+  background: transparent;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+
+.glass {
+  background: var(--card-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.error-boundary {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  text-align: center;
+  padding: 2rem;
+  background: var(--background);
+  color: var(--text);
+}
+
+.error-boundary h2 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.error-boundary p {
+  font-size: 1rem;
+  margin-bottom: 1.5rem;
+  color: var(--error);
+}
+
+.error-boundary button {
+  padding: 0.8rem 1.5rem;
+  background: linear-gradient(90deg, var(--gold), #FBBF24);
+  color: #1F2937;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.error-boundary button:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+}
+/* frontend/src/styles/index.css (append at the end) */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 80px);
+  color: var(--text);
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid var(--gold);
+  border-top: 5px solid var(--gold-dark);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: 1rem;
+}
+
+.loading-message {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--secondary);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+/* src/styles/index.css – append */
+[data-theme="dark"] .transactions-table tr:hover {
+  background: rgba(255, 193, 7, 0.15);
+}
+
+[data-theme="dark"] .notification-card {
+  border-color: var(--gold);
+}
+
+[data-theme="dark"] .export-btn {
+  background: var(--gold);
+  color: #1a1a1a;
+}
+
+[data-theme="dark"] .export-btn:hover {
+  background: var(--gold-dark);
+}
+/* Add to the end of index.css */
+:root {
+  --skeleton-base: #e5e7eb;
+  --skeleton-highlight: #f3f4f6;
+}
+
+[data-theme="dark"] {
+  --skeleton-base: #1f2937;
+  --skeleton-highlight: #374151;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+/* Mobile */
+@media (max-width: 576px) {
+  .error-boundary h2 { font-size: 1.6rem; }
+  .error-boundary p { font-size: 0.9rem; }
+  .error-boundary button { padding: 0.7rem 1.2rem; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes scaleIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+@keyframes fadeInDown {
+  from { opacity: 0; transform: translateY(-10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInDown {
+  from { opacity: 0; transform: translateY(-20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideInLeft {
+  from { transform: translateX(-100%); }
+  to { transform: translateX(0); }
+}
+
+@keyframes bounce {
+  0%, 20%, 50%, 80%, 100% { transform: translateY(0); }
+  40% { transform: translateY(-5px); }
+  60% { transform: translateY(-3px); }
+}
+
+.main-content {
+  flex-grow: 1; 
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .main-content { margin-left: 0; width: 100%; }
+}
+
+/* Tablet */
+@media (max-width: 768px) and (min-width: 577px) {
+  .main-content { margin-left: 200px; width: calc(100% - 200px); }
+}
+
+/* Laptop */
+@media (min-width: 769px) {
+  .main-content { margin-left: 250px; width: calc(100% - 250px); }
+}

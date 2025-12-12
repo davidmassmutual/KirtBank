@@ -1,0 +1,56 @@
+.deposit-options {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.deposit-options h3 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.deposit-options select,
+.deposit-options input {
+  padding: 0.8rem;
+  border: 1px solid #E5E7EB;
+  border-radius: 10px;
+  font-size: 1rem;
+  background: white;
+}
+
+.deposit-options select {
+  appearance: none;
+  background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24"><path fill="%23333" d="M7 10l5 5 5-5z"/></svg>')
+    no-repeat right 0.8rem center;
+  background-size: 12px;
+}
+
+.deposit-options button {
+  padding: 0.8rem;
+  background: linear-gradient(90deg, var(--accent), #FBBF24);
+  color: white;
+  border: none;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.deposit-options button:hover {
+  background: linear-gradient(90deg, #FBBF24, var(--accent));
+}
+
+/* Mobile */
+@media (max-width: 576px) {
+  .deposit-options h3 {
+    font-size: 1.1rem;
+  }
+  .deposit-options select,
+  .deposit-options input {
+    padding: 0.7rem;
+    font-size: 0.9rem;
+  }
+  .deposit-options button {
+    padding: 0.7rem;
+  }
+}
