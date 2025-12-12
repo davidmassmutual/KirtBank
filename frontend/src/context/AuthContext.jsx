@@ -19,10 +19,12 @@ export const AuthProvider = ({ children }) => {
       return;
     }
     try {
-      const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+      const res = await axios.get(`${API_BASE_URL}/api/user`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       setUser(res.data);
+      setIsAdmin(res.data.isAdmin || false);
+      localStorage.setItem('isAdmin', (res.data.isAdmin || false).toString());
     } catch (err) {
       console.error('Auth error:', err);
       logout();

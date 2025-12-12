@@ -305,7 +305,7 @@
 .admin-header h1 {
   font-size: 2.2rem;
   font-weight: 700;
-  color: var(--primary);
+  color: var(--text);
   display: flex;
   align-items: center;
   gap: 0.6rem;
@@ -359,6 +359,26 @@
 
 .export-btn:hover {
   background: var(--accent);
+  transform: translateY(-2px);
+}
+
+.refresh-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.2rem;
+  background: var(--secondary);
+  color: var(--text);
+  border: 1px solid var(--highlight);
+  border-radius: 50px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.refresh-btn:hover {
+  background: var(--primary);
+  color: white;
   transform: translateY(-2px);
 }
 

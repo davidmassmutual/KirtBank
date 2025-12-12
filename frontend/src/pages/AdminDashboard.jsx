@@ -7,7 +7,7 @@ import { CSVLink } from 'react-csv';
 import LoadingSkeleton from '../components/LoadingSkeleton';
 import {
   FaSearch, FaEdit, FaTrash, FaEye, FaFileCsv, FaCheck, FaTimes,
-  FaHistory, FaPlus, FaBell, FaUserShield
+  FaHistory, FaPlus, FaBell, FaUserShield, FaSync
 } from 'react-icons/fa';
 import '../styles/AdminDashboard.css';
 import API_BASE_URL from '../config/api';
@@ -137,7 +137,9 @@ function AdminDashboard() {
         ));
       }
 
+      // Refresh data after action
       fetchNotifs();
+      fetchUsers(search, page);
     } catch (err) {
       toast.error(err.response?.data?.message || `Failed to ${action} deposit`);
       console.error(err);
@@ -392,6 +394,18 @@ function AdminDashboard() {
               onKeyPress={e => e.key === 'Enter' && handleSearch()}
             />
           </div>
+          <button
+            onClick={() => {
+              fetchUsers(search, page);
+              fetchNotifs();
+              fetchPendingDeposits();
+              toast.success('Data refreshed!');
+            }}
+            className="refresh-btn"
+            title="Refresh Data"
+          >
+            <FaSync /> Refresh
+          </button>
           <CSVLink data={csvData} filename="kirtbank-users.csv" className="export-btn">
             <FaFileCsv /> Export CSV
           </CSVLink>
