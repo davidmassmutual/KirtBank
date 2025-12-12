@@ -34,6 +34,7 @@ function AdminDashboard() {
   const [popupMsg, setPopupMsg] = useState('');
   const [userDocuments, setUserDocuments] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [showLoanInfo, setShowLoanInfo] = useState(false);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const pollRef = useRef(null);
@@ -453,43 +454,45 @@ function AdminDashboard() {
                 </div>
               </div>
 
-              <div className="user-loan-info">
-                <h4>Loan Information</h4>
-                <div className="loan-info-grid">
-                  <div className="loan-info-item">
-                    <span className="loan-label">Loan Status:</span>
-                    <span className={`loan-status ${selectedUser.hasReceivedLoan ? 'received' : 'none'}`}>
-                      {selectedUser.hasReceivedLoan ? 'Active Loan' : 'No Loan'}
-                    </span>
-                  </div>
-                  {selectedUser.hasReceivedLoan && (
-                    <>
-                      <div className="loan-info-item">
-                        <span className="loan-label">Loan Amount:</span>
-                        <span className="loan-amount">${(selectedUser.currentLoanAmount || 0).toLocaleString()}</span>
-                      </div>
-                      <div className="loan-info-item">
-                        <span className="loan-label">Loan Start:</span>
-                        <span className="loan-date">
-                          {selectedUser.loanStartDate ? new Date(selectedUser.loanStartDate).toLocaleDateString() : 'N/A'}
-                        </span>
-                      </div>
-                      <div className="loan-info-item">
-                        <span className="loan-label">Repayment Due:</span>
-                        <span className="loan-date">
-                          {selectedUser.loanRepaymentDate ? new Date(selectedUser.loanRepaymentDate).toLocaleDateString() : 'N/A'}
-                        </span>
-                      </div>
-                    </>
-                  )}
-                  {selectedUser.loanOffer && !selectedUser.hasReceivedLoan && (
+              {showLoanInfo && (
+                <div className="user-loan-info">
+                  <h4>Loan Information</h4>
+                  <div className="loan-info-grid">
                     <div className="loan-info-item">
-                      <span className="loan-label">Loan Offer:</span>
-                      <span className="loan-offer">${(selectedUser.loanOffer || 0).toLocaleString()}</span>
+                      <span className="loan-label">Loan Status:</span>
+                      <span className={`loan-status ${selectedUser.hasReceivedLoan ? 'received' : 'none'}`}>
+                        {selectedUser.hasReceivedLoan ? 'Active Loan' : 'No Loan'}
+                      </span>
                     </div>
-                  )}
+                    {selectedUser.hasReceivedLoan && (
+                      <>
+                        <div className="loan-info-item">
+                          <span className="loan-label">Loan Amount:</span>
+                          <span className="loan-amount">${(selectedUser.currentLoanAmount || 0).toLocaleString()}</span>
+                        </div>
+                        <div className="loan-info-item">
+                          <span className="loan-label">Loan Start:</span>
+                          <span className="loan-date">
+                            {selectedUser.loanStartDate ? new Date(selectedUser.loanStartDate).toLocaleDateString() : 'N/A'}
+                          </span>
+                        </div>
+                        <div className="loan-info-item">
+                          <span className="loan-label">Repayment Due:</span>
+                          <span className="loan-date">
+                            {selectedUser.loanRepaymentDate ? new Date(selectedUser.loanRepaymentDate).toLocaleDateString() : 'N/A'}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                    {selectedUser.loanOffer && !selectedUser.hasReceivedLoan && (
+                      <div className="loan-info-item">
+                        <span className="loan-label">Loan Offer:</span>
+                        <span className="loan-offer">${(selectedUser.loanOffer || 0).toLocaleString()}</span>
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
 
               <div className="user-actions">
                 <h4>Actions</h4>
@@ -503,11 +506,8 @@ function AdminDashboard() {
                   <button onClick={() => viewDocuments(selectedUser)} className="action-btn view-documents">
                     View Documents
                   </button>
-                  <button onClick={() => {
-                    // Placeholder for loans action
-                    toast.info('Loans management coming soon');
-                  }} className="action-btn manage-loans">
-                    Manage Loans
+                  <button onClick={() => setShowLoanInfo(!showLoanInfo)} className="action-btn manage-loans">
+                    {showLoanInfo ? 'Hide Loan Info' : 'Manage Loans'}
                   </button>
                   <button onClick={() => {
                     // Placeholder for remove transactions action

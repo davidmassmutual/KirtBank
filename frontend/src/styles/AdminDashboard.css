@@ -21,7 +21,7 @@
   color: var(--text);
   font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   overflow-x: hidden;
-  margin-left: 0 !important; /* Override main-content margin */
+  margin-left: -250px !important; /* Override main-content margin */
   width: 100vw !important; /* Override main-content width */
 }
 
@@ -120,7 +120,7 @@
 .user-details {
   background: var(--card-bg);
   border-radius: 12px;
-  padding: 1.5rem;
+  padding: 2rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
