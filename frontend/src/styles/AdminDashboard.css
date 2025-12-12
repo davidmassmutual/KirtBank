@@ -250,7 +250,7 @@
   background: var(--card-bg);
   border-radius: 12px;
   padding: 1rem;
-  margin: 1rem 1.5rem;
+  margin: 1rem 1.5rem 1rem 1.5rem;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
@@ -298,6 +298,7 @@
   justify-content: space-between;
   align-items: center;
   margin-bottom: 2rem;
+  padding: 0 1.5rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
@@ -943,6 +944,7 @@
 @media (max-width: 768px) {
   .admin-dashboard-fullscreen {
     padding: 0;
+    margin-left: 0rem !important;
   }
 
   .admin-main-content {
