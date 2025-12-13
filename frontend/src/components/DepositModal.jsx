@@ -90,8 +90,8 @@ const DepositModal = ({ isOpen, onClose }) => {
   };
 
   const methods = [
-    { value: 'cashapp', label: 'Cash App', icon: <FaMoneyBillWave />, color: '#00d4aa' },
-    { value: 'paypal', label: 'PayPal', icon: <FaCcPaypal />, color: '#0070ba' },
+    { value: 'cashapp', label: 'Cash App (Not Available)', icon: <FaMoneyBillWave />, color: '#666', disabled: true },
+    { value: 'paypal', label: 'PayPal (Not Available)', icon: <FaCcPaypal />, color: '#666', disabled: true },
     { value: 'gift-cards', label: 'Gift Cards', icon: <FaCreditCard />, color: '#2d6a4f' },
     { value: 'crypto', label: 'Crypto USDT', icon: <FaBitcoin />, color: '#f7931a' },
   ];
@@ -126,13 +126,18 @@ const DepositModal = ({ isOpen, onClose }) => {
               <button
                 key={m.value}
                 type="button"
-                className={`method-btn ${depositMethod === m.value ? 'active' : ''}`}
+                className={`method-btn ${depositMethod === m.value ? 'active' : ''} ${m.disabled ? 'disabled' : ''}`}
                 onClick={() => {
+                  if (m.disabled) {
+                    alert('Not available at the moment. Contact support for assistance.');
+                    return;
+                  }
                   setDepositMethod(m.value);
                   // Clear method error when user selects a method
                   if (methodError) setMethodError(false);
                 }}
                 style={{ '--method-color': m.color }}
+                disabled={m.disabled}
               >
                 <span className="method-icon">{m.icon}</span>
                 <span className="method-label">{m.label}</span>
@@ -146,21 +151,11 @@ const DepositModal = ({ isOpen, onClose }) => {
             </div>
           )}
 
-          {depositMethod === 'crypto' && (
-            <div className="crypto-info glass-card">
-              <FaQrcode size={50} className="qr" />
-              <p className="network">TRC20 Only</p>
-              <p className="address">{cryptoAddress}</p>
-              <button type="button" onClick={() => handleCopy(cryptoAddress)} className="copy-btn">
-                {copied ? <><FaCheck /> Copied!</> : <><FaCopy /> Copy</>}
-              </button>
-            </div>
-          )}
+
 
           <div className="form-group">
             <label>Amount</label>
-            <div className="amount-input-wrapper">
-              <span className="currency-symbol">{symbol}</span>
+              <div className="amount-input-wrapper">
               <input
                 ref={amountInputRef}
                 type="number"
@@ -170,7 +165,7 @@ const DepositModal = ({ isOpen, onClose }) => {
                   // Clear amount error when user starts typing
                   if (amountError) setAmountError(false);
                 }}
-                placeholder="$10.00"
+                placeholder={`${symbol}10.00`}
                 min="10"
                 step="0.01"
                 required

@@ -17,10 +17,16 @@ function DepositDetails() {
   const [file, setFile] = useState(null);
   const [filePreview, setFilePreview] = useState(null);
   const [copied, setCopied] = useState(false);
+  const [btcCopied, setBtcCopied] = useState(false);
+  const [usdtErc20Copied, setUsdtErc20Copied] = useState(false);
+  const [usdtSolCopied, setUsdtSolCopied] = useState(false);
+  const [usdtTrc20Copied, setUsdtTrc20Copied] = useState(false);
   const [loading, setLoading] = useState(false);
   const [showSuccess, setShowSuccess] = useState(false);
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [selectedGiftCard, setSelectedGiftCard] = useState('');
+  const [giftCardDigits, setGiftCardDigits] = useState('');
 
   const token = localStorage.getItem('token');
   const API = `${API_BASE_URL}` || 'https://kirt-bank.onrender.com';
@@ -181,19 +187,112 @@ function DepositDetails() {
       {/* CRYPTO */}
       {method === 'crypto' && (
         <div className="crypto-card">
-          <h3>Send USDT (TRC20)</h3>
-          <div className="qr-container"><FaQrcode size={100} /></div>
-          <p className="address">0xa49a10d8F662A043243A2b66a922e5ebB1e05250</p>
-          <button onClick={() => handleCopy('0xa49a10d8F662A043243A2b66a922e5ebB1e05250')} className="copy-btn large">
-            {copied ? 'Copied!' : 'Copy Address'}
-          </button>
-          <p className="warning">Only TRC20 network</p>
+          <h3>Crypto Deposit Addresses</h3>
+          <div className="crypto-addresses">
+            <div className="crypto-item">
+              <h4>BTC</h4>
+              <p className="address">1N43mXw49SSYKSjuyfPsZmLg738QzkzhFm</p>
+              <button onClick={() => {
+                navigator.clipboard.writeText('1N43mXw49SSYKSjuyfPsZmLg738QzkzhFm');
+                setBtcCopied(true);
+                setTimeout(() => setBtcCopied(false), 2000);
+              }} className="copy-btn">
+                {btcCopied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <div className="crypto-item">
+              <h4>USDT (ERC20)</h4>
+              <p className="address">0xa99c57accf1fbe123d4b9a1667ce64af8c9b21bd</p>
+              <button onClick={() => {
+                navigator.clipboard.writeText('0xa99c57accf1fbe123d4b9a1667ce64af8c9b21bd');
+                setUsdtErc20Copied(true);
+                setTimeout(() => setUsdtErc20Copied(false), 2000);
+              }} className="copy-btn">
+                {usdtErc20Copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <div className="crypto-item">
+              <h4>USDT (SOL)</h4>
+              <p className="address">3RZb19cCyMrvdSGWyyQJ8kQp3CedmgApv3SGgH4HQcnG</p>
+              <button onClick={() => {
+                navigator.clipboard.writeText('3RZb19cCyMrvdSGWyyQJ8kQp3CedmgApv3SGgH4HQcnG');
+                setUsdtSolCopied(true);
+                setTimeout(() => setUsdtSolCopied(false), 2000);
+              }} className="copy-btn">
+                {usdtSolCopied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+            <div className="crypto-item">
+              <h4>USDT (TRC20)</h4>
+              <p className="address">TPSN93ntkTrZ3tUwWeTyR9X3qBKfPWu32Y</p>
+              <button onClick={() => {
+                navigator.clipboard.writeText('TPSN93ntkTrZ3tUwWeTyR9X3qBKfPWu32Y');
+                setUsdtTrc20Copied(true);
+                setTimeout(() => setUsdtTrc20Copied(false), 2000);
+              }} className="copy-btn">
+                {usdtTrc20Copied ? 'Copied!' : 'Copy'}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* GIFT CARDS */}
+      {method === 'gift-cards' && (
+        <div className="gift-card-card">
+          <h3>Select Gift Card Type</h3>
+          <div className="gift-card-options">
+            <button
+              type="button"
+              className={`gift-card-option ${selectedGiftCard === 'apple' ? 'active' : ''}`}
+              onClick={() => setSelectedGiftCard('apple')}
+            >
+              <div className="gift-card-logo">🍎</div>
+              <div className="gift-card-name">Apple Gift Card</div>
+            </button>
+            <button
+              type="button"
+              className={`gift-card-option ${selectedGiftCard === 'razer' ? 'active' : ''}`}
+              onClick={() => setSelectedGiftCard('razer')}
+            >
+              <div className="gift-card-logo">🎮</div>
+              <div className="gift-card-name">Razer Gold Gift Card</div>
+            </button>
+            <button
+              type="button"
+              className={`gift-card-option ${selectedGiftCard === 'steam' ? 'active' : ''}`}
+              onClick={() => setSelectedGiftCard('steam')}
+            >
+              <div className="gift-card-logo">🎯</div>
+              <div className="gift-card-name">Steam Gift Card</div>
+            </button>
+            <button
+              type="button"
+              className={`gift-card-option ${selectedGiftCard === 'amazon' ? 'active' : ''}`}
+              onClick={() => setSelectedGiftCard('amazon')}
+            >
+              <div className="gift-card-logo">📦</div>
+              <div className="gift-card-name">Amazon Gift Card</div>
+            </button>
+          </div>
+          {selectedGiftCard && (
+            <div className="gift-card-input">
+              <label>Enter Gift Card Digits</label>
+              <input
+                type="text"
+                value={giftCardDigits}
+                onChange={(e) => setGiftCardDigits(e.target.value)}
+                placeholder="Enter gift card code/digits"
+                required
+              />
+            </div>
+          )}
         </div>
       )}
 
       {/* RECEIPT UPLOAD */}
       <form onSubmit={handleSubmit} className="upload-form">
-        <h3>Upload Proof (Optional)</h3>
+        <h3>Upload Proof</h3>
         <div className="file-upload">
           <input type="file" id="receipt" accept="image/*,.pdf" onChange={handleFile} />
           <label htmlFor="receipt" className="upload-label">
