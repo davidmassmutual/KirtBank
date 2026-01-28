@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
 import { useDeposit } from '../context/DepositContext';
