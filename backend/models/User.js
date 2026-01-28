@@ -52,6 +52,12 @@ const userSchema = new mongoose.Schema({
   loanRepaymentDate: { type: Date },
   idDocument: { type: String, default: '' },
   ssn: { type: String, default: '' }, // Will be stored encrypted
+  kycStatus: { type: String, default: 'pending', enum: ['pending', 'submitted', 'verified', 'rejected'] },
+  kycSubmittedAt: { type: Date },
+  kycDocument: { type: String, default: '' },
+  kycVerifiedAt: { type: Date },
+  kycRejectedAt: { type: Date },
+  kycRejectionReason: { type: String, default: '' },
 
   // Admin notifications
   adminNotifications: [{

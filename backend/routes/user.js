@@ -348,12 +348,46 @@ router.post('/kyc', verifyToken, upload.single('idDocument'), async (req, res) =
 });
 
 // ──────────────────────────────────────────────────────────────
+// ADMIN: Get Pending KYC Requests
+// GET /api/user/kyc-pending
+// ──────────────────────────────────────────────────────────────
+router.get('/kyc-pending', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const pendingKycUsers = await User.find({ 
+      kycStatus: { $in: ['submitted', 'pending'] } 
+    }).select('name email kycStatus kycSubmittedAt kycDocument idDocument ssn');
+    
+    res.json(pendingKycUsers);
+  } catch (err) {
+    console.error('Get pending KYC requests error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ──────────────────────────────────────────────────────────────
+// ADMIN: Get All KYC Status
+// GET /api/user/kyc-all
+// ──────────────────────────────────────────────────────────────
+router.get('/kyc-all', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const allKycUsers = await User.find({ 
+      kycStatus: { $ne: null } 
+    }).select('name email kycStatus kycSubmittedAt kycDocument idDocument ssn createdAt');
+    
+    res.json(allKycUsers);
+  } catch (err) {
+    console.error('Get all KYC status error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ──────────────────────────────────────────────────────────────
 // ADMIN: Approve/Reject KYC
 // PUT /api/user/:userId/kyc-approve
 // ──────────────────────────────────────────────────────────────
 router.put('/:userId/kyc-approve', verifyToken, isAdmin, async (req, res) => {
   try {
-    const { action } = req.body; // 'approve' or 'reject'
+    const { action, reason } = req.body; // 'approve' or 'reject', optional reason for rejection
     const userId = req.params.userId;
 
     const user = await User.findById(userId);
@@ -361,19 +395,82 @@ router.put('/:userId/kyc-approve', verifyToken, isAdmin, async (req, res) => {
 
     if (action === 'approve') {
       user.kycStatus = 'verified';
+      user.kycVerifiedAt = new Date();
       await logAdminNotification(req.userId, `KYC approved for ${user.name} (${user.email})`);
+      
+      // Add success notification to user
+      user.notifications.push({
+        message: 'Your KYC verification has been approved! You now have full access to all features.',
+        type: 'kyc_success',
+        date: new Date(),
+      });
     } else if (action === 'reject') {
       user.kycStatus = 'rejected';
-      user.kycDocument = null; // Optionally remove document
-      await logAdminNotification(req.userId, `KYC rejected for ${user.name} (${user.email})`);
+      user.kycRejectedAt = new Date();
+      user.kycRejectionReason = reason || 'Document verification failed';
+      
+      await logAdminNotification(req.userId, `KYC rejected for ${user.name} (${user.email}) - ${reason || 'Document verification failed'}`);
+      
+      // Add rejection notification to user
+      user.notifications.push({
+        message: `Your KYC verification has been rejected: ${reason || 'Document verification failed'}. Please resubmit with valid documents.`,
+        type: 'kyc_rejected',
+        date: new Date(),
+      });
     } else {
-      return res.status(400).json({ message: 'Invalid action' });
+      return res.status(400).json({ message: 'Invalid action. Use "approve" or "reject"' });
     }
 
     await user.save();
-    res.json({ message: `KYC ${action}d successfully`, kycStatus: user.kycStatus });
+    res.json({ 
+      message: `KYC ${action}d successfully`, 
+      kycStatus: user.kycStatus,
+      ...(action === 'reject' && { rejectionReason: user.kycRejectionReason })
+    });
   } catch (err) {
     console.error('KYC approval error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ──────────────────────────────────────────────────────────────
+// ADMIN: Resubmit KYC for User
+// PUT /api/user/:userId/kyc-resubmit
+// ──────────────────────────────────────────────────────────────
+router.put('/:userId/kyc-resubmit', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const userId = req.params.userId;
+
+    const user = await User.findById(userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Reset KYC status to allow resubmission
+    user.kycStatus = 'pending';
+    user.kycSubmittedAt = null;
+    user.kycVerifiedAt = null;
+    user.kycRejectedAt = null;
+    user.kycRejectionReason = null;
+    user.kycDocument = null;
+
+    await user.save();
+
+    // Add notification to user
+    user.notifications.push({
+      message: 'Your KYC status has been reset by an administrator. You can now resubmit your documents.',
+      type: 'kyc_reset',
+      date: new Date(),
+    });
+
+    await user.save();
+
+    await logAdminNotification(req.userId, `KYC reset for ${user.name} (${user.email}) - User can resubmit documents`);
+
+    res.json({ 
+      message: 'KYC status reset successfully. User can resubmit documents.',
+      kycStatus: user.kycStatus
+    });
+  } catch (err) {
+    console.error('KYC resubmit error:', err.message);
     res.status(500).json({ message: 'Server error' });
   }
 });

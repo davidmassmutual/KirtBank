@@ -30,6 +30,7 @@ function AdminDashboard() {
   const [transactions, setTransactions] = useState([]);
   const [newTx, setNewTx] = useState({ type: '', amount: '', method: '', status: 'Completed', account: 'checking', date: '' });
   const [pendingDeposits, setPendingDeposits] = useState([]);
+  const [pendingKYC, setPendingKYC] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [popupMsg, setPopupMsg] = useState('');
   const [userDocuments, setUserDocuments] = useState(null);
@@ -102,19 +103,33 @@ function AdminDashboard() {
     }
   }, [token, API]);
 
+  // FETCH PENDING KYC
+  const fetchPendingKYCData = useCallback(async () => {
+    try {
+      const kycData = await fetchPendingKYC();
+      setPendingKYC(kycData);
+    } catch (err) {
+      console.error('Failed to fetch pending KYC:', err);
+    }
+  }, [fetchPendingKYC]);
+
   // POLLING
   useEffect(() => {
     fetchPendingDeposits();
+    fetchPendingKYCData();
+    
     const depositPoll = setInterval(fetchPendingDeposits, 5000);
+    const kycPoll = setInterval(fetchPendingKYCData, 10000);
 
     // Poll notifications every 10 seconds
     const notifPoll = setInterval(fetchNotifs, 10000);
 
     return () => {
       clearInterval(depositPoll);
+      clearInterval(kycPoll);
       clearInterval(notifPoll);
     };
-  }, [fetchPendingDeposits, fetchNotifs]);
+  }, [fetchPendingDeposits, fetchPendingKYCData, fetchNotifs]);
 
   // CONFIRM / REJECT DEPOSIT
   const handleDepositAction = async (txId, action) => {
@@ -309,6 +324,32 @@ function AdminDashboard() {
     }
   };
 
+  // FETCH PENDING KYC REQUESTS
+  const fetchPendingKYC = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/api/user/kyc-pending`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data || [];
+    } catch (err) {
+      console.error('Failed to fetch pending KYC requests:', err);
+      return [];
+    }
+  }, [token, API]);
+
+  // FETCH ALL KYC STATUS
+  const fetchAllKYC = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/api/user/kyc-all`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data || [];
+    } catch (err) {
+      console.error('Failed to fetch all KYC status:', err);
+      return [];
+    }
+  }, [token, API]);
+
   // HANDLE KYC APPROVAL/REJECTION
   const handleKYCAction = async (userId, action) => {
     try {
@@ -372,6 +413,38 @@ function AdminDashboard() {
                     Confirm
                   </button>
                   <button onClick={() => handleDepositAction(tx._id, 'reject')} className="reject-btn">
+                    Reject
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* PENDING KYC REQUESTS */}
+      {pendingKYC.length > 0 && (
+        <div className="pending-kyc-card">
+          <h3><FaUserShield /> Pending KYC Requests ({pendingKYC.length})</h3>
+          <div className="kyc-list">
+            {pendingKYC.map(user => (
+              <div key={user._id} className="kyc-item">
+                <div className="kyc-user-info">
+                  <div className="kyc-avatar">{user.name.charAt(0).toUpperCase()}</div>
+                  <div className="kyc-details">
+                    <strong>{user.name}</strong>
+                    <span>{user.email}</span>
+                    <span className="kyc-date">Submitted: {user.kycSubmittedAt ? new Date(user.kycSubmittedAt).toLocaleDateString() : 'N/A'}</span>
+                  </div>
+                </div>
+                <div className="kyc-actions">
+                  <button onClick={() => viewDocuments(user)} className="kyc-view-btn">
+                    View Documents
+                  </button>
+                  <button onClick={() => handleKYCAction(user._id, 'approve')} className="kyc-approve-btn">
+                    Approve
+                  </button>
+                  <button onClick={() => handleKYCAction(user._id, 'reject')} className="kyc-reject-btn">
                     Reject
                   </button>
                 </div>
