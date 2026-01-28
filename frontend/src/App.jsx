@@ -71,6 +71,12 @@ function AppContent() {
     const validateToken = async () => {
       const token = localStorage.getItem('token');
       const tokenExpiry = localStorage.getItem('tokenExpiry');
+      const storedIsAdmin = localStorage.getItem('isAdmin');
+
+      // Sync admin status from localStorage
+      if (storedIsAdmin !== null) {
+        setIsAdmin(storedIsAdmin === 'true');
+      }
 
       if (token) {
         // Check if token is expired

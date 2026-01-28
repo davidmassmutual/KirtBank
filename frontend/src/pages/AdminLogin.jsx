@@ -36,11 +36,10 @@ function AdminLogin() {
       setToken(token);
       setIsAdmin(true);
 
-      // Wait for user data to be fetched before navigating
-      await fetchUser();
-
+      // Set admin status immediately without waiting for fetchUser
       setSuccess('Admin login successful!');
-      setTimeout(() => navigate('/admin/dashboard'), 500);
+      // Navigate immediately to admin dashboard
+      navigate('/admin/dashboard');
     } catch (err) {
       console.error('Admin login error:', err.response?.data?.message, err.message);
       setError(err.response?.data?.message || 'Admin login failed');
