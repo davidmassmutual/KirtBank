@@ -20,6 +20,23 @@ function TransferPayment() {
   const { openDepositModal } = useDeposit();
 
   const token = localStorage.getItem('token');
+  const [userId, setUserId] = useState('');
+
+  // Get user ID from token or API
+  useEffect(() => {
+    const fetchUserId = async () => {
+      if (!token) return;
+      try {
+        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setUserId(res.data._id);
+      } catch (err) {
+        console.error('Failed to fetch user ID:', err);
+      }
+    };
+    fetchUserId();
+  }, [token, API_BASE_URL]);
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
@@ -46,18 +63,13 @@ function TransferPayment() {
     setError('');
     
     try {
-      // First, verify the account
-      const verifyRes = await axios.post(`${API_BASE_URL}/api/transfer/verify-account`, {
-        accountNumber: form.accountNumber,
-        routingNumber: form.routing
-      }, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // Simulate account verification (since verify-account endpoint doesn't exist)
+      // For now, we'll generate a fake account name and check if it matches
+      const simulatedAccountName = `${form.name.split(' ')[0]} ${form.name.split(' ')[1]?.[0] || ''}***`.trim();
+      setAccountName(simulatedAccountName);
 
-      setAccountName(verifyRes.data.accountName || 'John Doe');
-
-      // Check if names match
-      if (form.name.toLowerCase() !== (verifyRes.data.accountName || 'John Doe').toLowerCase()) {
+      // Check if names match (case-insensitive)
+      if (form.name.toLowerCase() !== simulatedAccountName.toLowerCase()) {
         setError('Account name different from name registered');
         return;
       }
@@ -72,7 +84,8 @@ function TransferPayment() {
         routingNumber: form.routing,
       };
 
-      const res = await axios.post(`${API_BASE_URL}/api/transfer`, transferData, {
+      // Use the existing transactions endpoint for transfers
+      const res = await axios.post(`${API_BASE_URL}/api/transactions/user/${userId}`, transferData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
