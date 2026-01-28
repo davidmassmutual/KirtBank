@@ -113,16 +113,17 @@ function AdminDashboard() {
     }
   }, [fetchPendingKYC]);
 
-  // POLLING
+  // OPTIMIZED POLLING FOR FREE TIER
   useEffect(() => {
+    // Initial fetch
     fetchPendingDeposits();
     fetchPendingKYCData();
+    fetchNotifs();
     
-    const depositPoll = setInterval(fetchPendingDeposits, 5000);
-    const kycPoll = setInterval(fetchPendingKYCData, 10000);
-
-    // Poll notifications every 10 seconds
-    const notifPoll = setInterval(fetchNotifs, 10000);
+    // Free tier optimized intervals - longer delays to reduce API calls
+    const depositPoll = setInterval(fetchPendingDeposits, 30000); // 30 seconds instead of 5 seconds
+    const kycPoll = setInterval(fetchPendingKYCData, 60000); // 1 minute instead of 10 seconds
+    const notifPoll = setInterval(fetchNotifs, 60000); // 1 minute instead of 10 seconds
 
     return () => {
       clearInterval(depositPoll);
