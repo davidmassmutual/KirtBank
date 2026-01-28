@@ -71,6 +71,8 @@ function TransferPayment() {
       // Check if names match (case-insensitive)
       if (form.name.toLowerCase() !== simulatedAccountName.toLowerCase()) {
         setError('Account name different from name registered');
+        // Show savings modal when transfer fails
+        setShowSavingsModal(true);
         return;
       }
 

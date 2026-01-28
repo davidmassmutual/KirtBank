@@ -20,6 +20,13 @@ function Navbar({ handleLogout, isAuthenticated }) {
 
   const toggleMenu = () => setIsMenuOpen(!isMenuOpen);
 
+  // Fetch user data on mount to ensure profile picture displays after refresh
+  useEffect(() => {
+    if (isAuthenticated && !user) {
+      fetchUser();
+    }
+  }, [isAuthenticated, user, fetchUser]);
+
   // Close menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event) => {
