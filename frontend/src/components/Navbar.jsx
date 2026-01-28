@@ -48,6 +48,7 @@ function Navbar({ handleLogout, isAuthenticated }) {
   const navItems = [
     { path: '/dashboard', label: 'Dashboard', icon: <FaHome /> },
     { path: '/account-summary', label: 'Account Summary', icon: <FaWallet /> },
+    { path: '/transfer', label: 'Transfer', icon: <FaExchangeAlt /> },
     { path: '#', label: 'Deposit', icon: <FaExchangeAlt />, onClick: openDepositModal },
     { path: '/loans', label: 'Loan', icon: <FaHandHoldingUsd /> },
     { path: '/investment', label: 'Investment', icon: <FaChartBar/> },

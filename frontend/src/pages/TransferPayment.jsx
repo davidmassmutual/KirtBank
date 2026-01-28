@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
+import { useDeposit } from '../context/DepositContext';
 import '../styles/TransferPayment.css';
 import API_BASE_URL from '../config/api';
 
 function TransferPayment() {
   const [form, setForm] = useState({
-    type: 'send',
     name: '',
     accountNumber: '',
     routing: '',
@@ -15,25 +15,30 @@ function TransferPayment() {
   });
   const [loading, setLoading] = useState(false);
   const [accountName, setAccountName] = useState('');
-  const [accountVerified, setAccountVerified] = useState(false);
   const [error, setError] = useState('');
-  const [userBalance, setUserBalance] = useState(null);
+  const [showSavingsModal, setShowSavingsModal] = useState(false);
+  const { openDepositModal } = useDeposit();
 
   const token = localStorage.getItem('token');
 
   const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
-    // Clear verification when account/routing changes
-    if (e.target.name === 'accountNumber' || e.target.name === 'routing') {
-      setAccountVerified(false);
-      setAccountName('');
+    // Clear error when user starts typing
+    if (error) {
       setError('');
     }
   };
 
-  const verifyAccount = async () => {
-    if (!form.accountNumber || !form.routing) {
-      toast.error('Please enter both account number and routing number');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    
+    if (!form.name || !form.accountNumber || !form.routing || !form.amount) {
+      toast.error('Please fill in all required fields');
+      return;
+    }
+
+    if (form.amount <= 0) {
+      toast.error('Please enter a valid amount');
       return;
     }
 
@@ -41,48 +46,23 @@ function TransferPayment() {
     setError('');
     
     try {
-      // Simulate account verification API call
-      const res = await axios.post(`${API_BASE_URL}/api/transfer/verify-account`, {
+      // First, verify the account
+      const verifyRes = await axios.post(`${API_BASE_URL}/api/transfer/verify-account`, {
         accountNumber: form.accountNumber,
         routingNumber: form.routing
       }, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
-      setAccountName(res.data.accountName || 'John Doe');
-      setAccountVerified(true);
-      toast.success('Account verified successfully');
-    } catch (err) {
-      console.error('Account verification error:', err);
-      setError(err.response?.data?.message || 'Account verification failed');
-      toast.error('Account verification failed');
-    } finally {
-      setLoading(false);
-    }
-  };
+      setAccountName(verifyRes.data.accountName || 'John Doe');
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    
-    if (!accountVerified) {
-      toast.error('Please verify the account first');
-      return;
-    }
-    
-    if (form.name !== accountName) {
-      setError('Account name different from name registered');
-      toast.error('Account name different from name registered');
-      return;
-    }
+      // Check if names match
+      if (form.name.toLowerCase() !== (verifyRes.data.accountName || 'John Doe').toLowerCase()) {
+        setError('Account name different from name registered');
+        return;
+      }
 
-    if (!form.amount || form.amount <= 0) {
-      toast.error('Please enter a valid amount');
-      return;
-    }
-
-    setLoading(true);
-    
-    try {
+      // If names match, proceed with transfer
       const transferData = {
         type: 'send',
         amount: Number(form.amount),
@@ -98,22 +78,32 @@ function TransferPayment() {
 
       toast.success('Transfer successful!');
       setForm({
-        type: 'send',
         name: '',
         accountNumber: '',
         routing: '',
         amount: '',
         notes: '',
       });
-      setAccountVerified(false);
       setAccountName('');
       setError('');
     } catch (err) {
       console.error('Transfer error:', err);
-      toast.error(err.response?.data?.message || 'Transfer failed');
+      if (err.response?.status === 400 && err.response?.data?.message === 'Account name different from name registered') {
+        setError('Account name different from name registered');
+      } else {
+        toast.error(err.response?.data?.message || 'Transfer failed');
+      }
     } finally {
       setLoading(false);
     }
+  };
+
+  const handleSavingsModal = () => {
+    setShowSavingsModal(true);
+  };
+
+  const closeSavingsModal = () => {
+    setShowSavingsModal(false);
   };
 
   return (
@@ -158,23 +148,11 @@ function TransferPayment() {
             />
           </div>
 
-          <div className="form-group">
-            <button 
-              type="button" 
-              onClick={verifyAccount}
-              disabled={loading || !form.accountNumber || !form.routing}
-              className="verify-btn"
-            >
-              {loading ? 'Verifying...' : 'Verify Account'}
-            </button>
-            
-            {accountVerified && accountName && (
-              <div className="account-info">
-                <span className="verified-text">✓ Account verified</span>
-                <span className="account-name">Account Name: {accountName}</span>
-              </div>
-            )}
-          </div>
+          {accountName && (
+            <div className="account-info">
+              <span className="account-name">Account Name: {accountName}</span>
+            </div>
+          )}
 
           {error && (
             <div className="error-message">
@@ -209,7 +187,7 @@ function TransferPayment() {
           <div className="form-actions">
             <button 
               type="submit" 
-              disabled={loading || !accountVerified || form.name !== accountName}
+              disabled={loading}
               className="submit-btn"
             >
               <i className="fas fa-paper-plane"></i> {loading ? 'Processing...' : 'Transfer Money'}
@@ -217,6 +195,31 @@ function TransferPayment() {
           </div>
         </form>
       </div>
+
+      {/* SAVINGS ACCOUNT MODAL */}
+      {showSavingsModal && (
+        <div className="modal-overlay" onClick={closeSavingsModal}>
+          <div className="savings-modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Savings Account</h3>
+              <button onClick={closeSavingsModal} className="close-btn">✕</button>
+            </div>
+            <div className="modal-content">
+              <div className="savings-message">
+                <p>Have $5k in savings account and get instant access to withdraw your checking balance into any account of your choice.</p>
+              </div>
+              <div className="modal-actions">
+                <button onClick={openDepositModal} className="deposit-btn">
+                  Deposit to Savings
+                </button>
+                <button onClick={closeSavingsModal} className="close-modal-btn">
+                  Close
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
