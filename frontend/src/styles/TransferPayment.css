@@ -5,17 +5,31 @@
   overflow-x: hidden;
 }
 
-.transfer-payment form {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  max-width: 450px;
+.transfer-payment h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+  color: var(--text);
+}
+
+.transfer-form {
+  max-width: 600px;
   width: 100%;
   margin: 0 auto;
   background: var(--card-bg);
   padding: 2rem;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .transfer-payment input,
@@ -28,9 +42,68 @@
   color: var(--text);
   background: white;
   width: 100%;
+  transition: border-color 0.3s ease;
 }
 
-.transfer-payment button {
+.transfer-payment input:focus,
+.transfer-payment select:focus,
+.transfer-payment textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.verify-btn {
+  background: var(--accent);
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.verify-btn:hover:not(:disabled) {
+  background: #2563eb;
+}
+
+.verify-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.account-info {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #f0fdf4;
+  border: 1px solid #bbf7d0;
+  border-radius: 8px;
+}
+
+.verified-text {
+  display: block;
+  color: #16a34a;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+
+.account-name {
+  color: #374151;
+  font-size: 0.9rem;
+}
+
+.error-message {
+  margin-top: 1rem;
+  padding: 1rem;
+  background: #fef2f2;
+  border: 1px solid #fecaca;
+  border-radius: 8px;
+  color: #dc2626;
+  font-size: 0.9rem;
+}
+
+.submit-btn {
   padding: 0.9rem;
   background: var(--gold);
   color: var(--text);
@@ -38,14 +111,28 @@
   border-radius: 8px;
   font-weight: 600;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  width: 100%;
 }
 
-.transfer-payment button:hover {
+.submit-btn:hover:not(:disabled) {
   background: linear-gradient(90deg, #FBBF24, var(--accent));
 }
 
-.transfer-payment button i {
+.submit-btn:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+}
+
+.submit-btn i {
   margin-right: 0.5rem;
+}
+
+.form-actions {
+  margin-top: 2rem;
+  border-top: 1px solid #e5e7eb;
+  padding-top: 2rem;
 }
 
 /* Phone */
@@ -53,8 +140,11 @@
   .transfer-payment {
     padding: 1.5rem 0.5rem;
   }
-  .transfer-payment form {
+  .transfer-form {
     padding: 1.2rem;
+  }
+  .form-group {
+    margin-bottom: 1rem;
   }
 }
 

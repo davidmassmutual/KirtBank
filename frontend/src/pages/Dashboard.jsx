@@ -107,6 +107,27 @@ function Dashboard() {
         <AccountSummary />
       </div>
 
+      {/* SAVINGS ACCOUNT WITH DEPOSIT BUTTON */}
+      <div className="savings-account-section">
+        <div className="savings-card">
+          <div className="savings-header">
+            <h3>Savings Account</h3>
+            <p>Instant access to withdraw your checking balance</p>
+          </div>
+          <div className="savings-balance">
+            <span className="balance-label">Available Balance:</span>
+            <span className="balance-amount">
+              ${userData?.balance?.savings?.toLocaleString() || '0'}
+            </span>
+          </div>
+          <div className="savings-actions">
+            <button onClick={openDepositModal} className="deposit-btn">
+              <FaPlus /> Deposit to Savings
+            </button>
+          </div>
+        </div>
+      </div>
+
       {/* ACTION BUTTONS – 2×2 MOBILE, 4×1 DESKTOP */}
       <div className="action-grid">
         <button onClick={openDepositModal} className="action-card">

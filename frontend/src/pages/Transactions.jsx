@@ -57,12 +57,14 @@ function Transactions() {
   }, [fetchTransactions]);
 
   const filtered = useMemo(() => {
-    return transactions.filter(tx => {
-      const txt = `${tx.description || tx.type || ''} ${tx.method || ''} ${tx.amount || ''} ${tx.status || ''} ${tx._id || ''}`.toLowerCase();
-      const matchSearch = search === '' || txt.includes(search.toLowerCase());
-      const matchFilter = filter === 'all' || tx.status?.toLowerCase() === filter;
-      return matchSearch && matchFilter;
-    });
+    return transactions
+      .filter(tx => {
+        const txt = `${tx.description || tx.type || ''} ${tx.method || ''} ${tx.amount || ''} ${tx.status || ''} ${tx._id || ''}`.toLowerCase();
+        const matchSearch = search === '' || txt.includes(search.toLowerCase());
+        const matchFilter = filter === 'all' || tx.status?.toLowerCase() === filter;
+        return matchSearch && matchFilter;
+      })
+      .sort((a, b) => new Date(b.date) - new Date(a.date)); // Sort by date descending
   }, [transactions, search, filter]);
 
   if (loading) return <LoadingSkeleton />;
