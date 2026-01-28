@@ -101,15 +101,15 @@ function Transactions() {
           filtered.map(tx => (
             <div key={tx._id} className="transaction-card">
               <div className="transaction-icon">
-                {tx.type === 'deposit' ? <FaArrowDown className="icon deposit" /> : <FaArrowUp className="icon withdraw" />}
+                {(tx.type || '').toLowerCase() === 'deposit' ? <FaArrowDown className="icon deposit" /> : <FaArrowUp className="icon withdraw" />}
               </div>
               <div className="transaction-details">
-                <h3>{tx.description || tx.type?.charAt(0).toUpperCase() + tx.type?.slice(1)}</h3>
+                <h3>{tx.description || (tx.type ? tx.type.charAt(0).toUpperCase() + tx.type.slice(1) : '')}</h3>
                 <p>{new Date(tx.date).toLocaleDateString()} • {tx.method || '—'}</p>
               </div>
               <div className="transaction-amount">
-                <span style={{ color: tx.type === 'deposit' ? '#10b981' : '#ef4444', fontWeight: 600 }}>
-                  {tx.type === 'deposit' ? '+' : '-'}${tx.amount.toLocaleString()}
+                <span style={{ color: (tx.type || '').toLowerCase() === 'deposit' ? '#10b981' : '#ef4444', fontWeight: 600 }}>
+                  {(tx.type || '').toLowerCase() === 'deposit' ? '+' : '-'}${tx.amount.toLocaleString()}
                 </span>
               </div>
               <div className={`status-badge ${tx.status?.toLowerCase()}`}>

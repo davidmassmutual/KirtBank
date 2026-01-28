@@ -6,7 +6,7 @@ import API_BASE_URL from '../config/api';
 
 function TransferPayment() {
   const [form, setForm] = useState({
-    type: 'transfer',
+    type: 'send',
     name: '',
     accountNumber: '',
     routing: '',
@@ -64,17 +64,15 @@ function TransferPayment() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    if (form.type === 'send') {
-      if (!accountVerified) {
-        toast.error('Please verify the account first');
-        return;
-      }
-      
-      if (form.name !== accountName) {
-        setError('Account name different from name registered');
-        toast.error('Account name different from name registered');
-        return;
-      }
+    if (!accountVerified) {
+      toast.error('Please verify the account first');
+      return;
+    }
+    
+    if (form.name !== accountName) {
+      setError('Account name different from name registered');
+      toast.error('Account name different from name registered');
+      return;
     }
 
     if (!form.amount || form.amount <= 0) {
@@ -86,16 +84,13 @@ function TransferPayment() {
     
     try {
       const transferData = {
-        type: form.type,
+        type: 'send',
         amount: Number(form.amount),
         notes: form.notes,
+        recipientName: form.name,
+        accountNumber: form.accountNumber,
+        routingNumber: form.routing,
       };
-
-      if (form.type === 'send') {
-        transferData.recipientName = form.name;
-        transferData.accountNumber = form.accountNumber;
-        transferData.routingNumber = form.routing;
-      }
 
       const res = await axios.post(`${API_BASE_URL}/api/transfer`, transferData, {
         headers: { Authorization: `Bearer ${token}` }
@@ -103,7 +98,7 @@ function TransferPayment() {
 
       toast.success('Transfer successful!');
       setForm({
-        type: 'transfer',
+        type: 'send',
         name: '',
         accountNumber: '',
         routing: '',
@@ -123,81 +118,68 @@ function TransferPayment() {
 
   return (
     <div className="transfer-payment">
-      <h2><i className="fas fa-exchange-alt"></i> Transfer / Payment</h2>
+      <h2><i className="fas fa-exchange-alt"></i> Transfer Money</h2>
       
       <div className="transfer-form">
         <form onSubmit={handleSubmit}>
           <div className="form-group">
-            <label>Transfer Type</label>
-            <select name="type" value={form.type} onChange={handleChange}>
-              <option value="transfer">Transfer Between Accounts</option>
-              <option value="send">Send Money</option>
-              <option value="bill">Pay Bills</option>
-            </select>
+            <label>Recipient Name</label>
+            <input 
+              type="text" 
+              name="name" 
+              value={form.name}
+              onChange={handleChange} 
+              placeholder="Recipient Name"
+              required
+            />
           </div>
 
-          {form.type === 'send' && (
-            <>
-              <div className="form-group">
-                <label>Recipient Name</label>
-                <input 
-                  type="text" 
-                  name="name" 
-                  value={form.name}
-                  onChange={handleChange} 
-                  placeholder="Recipient Name"
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label>Account Number</label>
+            <input 
+              type="text" 
+              name="accountNumber" 
+              value={form.accountNumber}
+              onChange={handleChange} 
+              placeholder="Account Number"
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label>Account Number</label>
-                <input 
-                  type="text" 
-                  name="accountNumber" 
-                  value={form.accountNumber}
-                  onChange={handleChange} 
-                  placeholder="Account Number"
-                  required
-                />
-              </div>
+          <div className="form-group">
+            <label>Routing Number</label>
+            <input 
+              type="text" 
+              name="routing" 
+              value={form.routing}
+              onChange={handleChange} 
+              placeholder="Routing/SWIFT"
+              required
+            />
+          </div>
 
-              <div className="form-group">
-                <label>Routing Number</label>
-                <input 
-                  type="text" 
-                  name="routing" 
-                  value={form.routing}
-                  onChange={handleChange} 
-                  placeholder="Routing/SWIFT"
-                  required
-                />
+          <div className="form-group">
+            <button 
+              type="button" 
+              onClick={verifyAccount}
+              disabled={loading || !form.accountNumber || !form.routing}
+              className="verify-btn"
+            >
+              {loading ? 'Verifying...' : 'Verify Account'}
+            </button>
+            
+            {accountVerified && accountName && (
+              <div className="account-info">
+                <span className="verified-text">✓ Account verified</span>
+                <span className="account-name">Account Name: {accountName}</span>
               </div>
+            )}
+          </div>
 
-              <div className="form-group">
-                <button 
-                  type="button" 
-                  onClick={verifyAccount}
-                  disabled={loading || !form.accountNumber || !form.routing}
-                  className="verify-btn"
-                >
-                  {loading ? 'Verifying...' : 'Verify Account'}
-                </button>
-                
-                {accountVerified && accountName && (
-                  <div className="account-info">
-                    <span className="verified-text">✓ Account verified</span>
-                    <span className="account-name">Account Name: {accountName}</span>
-                  </div>
-                )}
-              </div>
-
-              {error && (
-                <div className="error-message">
-                  {error}
-                </div>
-              )}
-            </>
+          {error && (
+            <div className="error-message">
+              {error}
+            </div>
           )}
 
           <div className="form-group">
@@ -227,10 +209,10 @@ function TransferPayment() {
           <div className="form-actions">
             <button 
               type="submit" 
-              disabled={loading}
+              disabled={loading || !accountVerified || form.name !== accountName}
               className="submit-btn"
             >
-              <i className="fas fa-paper-plane"></i> {loading ? 'Processing...' : 'Submit Transfer'}
+              <i className="fas fa-paper-plane"></i> {loading ? 'Processing...' : 'Transfer Money'}
             </button>
           </div>
         </form>
