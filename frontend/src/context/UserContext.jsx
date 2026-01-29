@@ -22,8 +22,16 @@ export function UserProvider({ children }) {
       const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setUserData(res.data);
+      
+      // Ensure we always have a valid user object
+      if (res.data) {
+        setUserData(res.data);
+      } else {
+        setUserData(null); // Set to null instead of leaving undefined
+      }
     } catch (err) {
+      console.error('Failed to fetch user data:', err);
+      setUserData(null); // Set to null instead of leaving undefined
       if (err.response?.status === 401) {
         localStorage.removeItem('token');
         navigate('/');

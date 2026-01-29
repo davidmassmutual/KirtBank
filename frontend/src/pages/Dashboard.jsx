@@ -20,11 +20,17 @@ import '../styles/Dashboard.css';
 import API_BASE_URL from '../config/api';
 
 function Dashboard() {
-  const { userData, loading, refreshUserData } = useUser();
+  const userContext = useUser();
+  const { userData, loading, refreshUserData } = userContext || {};
   const [showNotifications, setShowNotifications] = useState(false);
   const { openDepositModal, isModalOpen, closeDepositModal } = useDeposit();
 
   if (loading) return <LoadingSkeleton />;
+  
+  // Add safety check for userData
+  if (!userData) {
+    return <div className="loading-user-data">Loading user data...</div>;
+  }
 
   return (
     <div className="dashboard">

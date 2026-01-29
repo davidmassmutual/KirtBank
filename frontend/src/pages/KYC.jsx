@@ -9,7 +9,8 @@ import API_BASE_URL from '../config/api';
 import { FaShieldAlt, FaCheckCircle, FaUpload, FaLock, FaUser, FaCreditCard } from 'react-icons/fa';
 
 const KYC = () => {
-  const { refreshUserData } = useUser();
+  const userContext = useUser();
+  const { refreshUserData } = userContext || {};
   const [kycStatus, setKycStatus] = useState('pending'); // pending, submitted, verified, rejected
   const [idFile, setIdFile] = useState(null);
   const [ssn, setSsn] = useState('');
