@@ -90,10 +90,9 @@ const DepositModal = ({ isOpen, onClose }) => {
   };
 
   const methods = [
-    { value: 'cashapp', label: 'Cash App (Not Available)', icon: <FaMoneyBillWave />, color: '#666', disabled: true },
-    { value: 'paypal', label: 'PayPal (Not Available)', icon: <FaCcPaypal />, color: '#666', disabled: true },
-    { value: 'gift-cards', label: 'Gift Cards', icon: <FaCreditCard />, color: '#2d6a4f' },
     { value: 'crypto', label: 'Crypto USDT', icon: <FaBitcoin />, color: '#f7931a' },
+    { value: 'zelle', label: 'Zelle (Not Available)', icon: <FaMobileAlt />, color: '#666', disabled: true },
+    { value: 'debit-card', label: 'Debit Card (Not Available)', icon: <FaCreditCard />, color: '#666', disabled: true },
   ];
 
   const cryptoAddress = '0xa49a10d8F662A043243A2b66a922e5ebB1e05250';
@@ -178,6 +177,34 @@ const DepositModal = ({ isOpen, onClose }) => {
               </div>
             )}
           </div>
+
+          {depositMethod === 'crypto' && (
+            <div className="crypto-details">
+              <div className="crypto-address">
+                <label>Bitcoin Address</label>
+                <div className="address-display">
+                  <code>{cryptoAddress}</code>
+                  <button 
+                    type="button" 
+                    className={`copy-btn ${copied ? 'copied' : ''}`}
+                    onClick={() => handleCopy(cryptoAddress)}
+                  >
+                    {copied ? <FaCheck /> : 'Copy'}
+                  </button>
+                </div>
+              </div>
+              <div className="crypto-qr">
+                <label>Scan QR Code</label>
+                <div className="qr-container">
+                  <img 
+                    src="/images/photo_2026-01-29 18.26.16.jpeg" 
+                    alt="Bitcoin QR Code" 
+                    className="qr-code"
+                  />
+                </div>
+              </div>
+            </div>
+          )}
 
           <div className="form-group">
             <label>To</label>

@@ -53,32 +53,37 @@ export default function Investments() {
   };
 
   const handleBreakInvestment = async (investment) => {
-    // Check if user has at least $10,000 in savings
-    if (userBalance.savings < 10000) {
-      toast.error('You need at least $10,000 in your savings account to break and withdraw an investment.');
-      return;
-    }
-
     try {
-      const response = await axios.post(
+      const response = await axios.get(`${API_BASE_URL}/api/investments/break/${investment._id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
+        return;
+      }
+
+      // If validation passed, proceed with breaking the investment
+      await axios.put(
         `${API_BASE_URL}/api/investments/break/${investment._id}`,
         {},
         {
-          headers: { Authorization: `Bearer ${token}` }
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`,
+          },
         }
       );
 
-      toast.success(response.data.message || 'Investment broken successfully!');
-      
-      // Refresh user data
-      const res = await axios.get(`${API_BASE_URL}/api/user`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      setUserInvestments(res.data.investments || []);
-      setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
-    } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to break investment');
-      console.error('Break investment error:', err);
+      toast.success('Investment broken successfully!');
+      fetchInvestments();
+      fetchUser();
+    } catch (error) {
+      if (error.response?.status === 400) {
+        toast.error('You need at least $10,000 in your savings account to break an investment');
+      } else {
+        toast.error(error.response?.data?.message || 'Failed to break investment');
+      }
     }
   };
 

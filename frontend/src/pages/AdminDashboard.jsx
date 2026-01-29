@@ -690,6 +690,13 @@ function AdminDashboard() {
                   <button onClick={() => viewDocuments(selectedUser)} className="action-btn view-documents">
                     View Documents
                   </button>
+                  <button 
+                    onClick={() => handleKYCAction(selectedUser._id, 'approve')} 
+                    className="action-btn kyc-verify-btn"
+                    disabled={selectedUser.kycStatus === 'verified'}
+                  >
+                    {selectedUser.kycStatus === 'verified' ? 'KYC Verified ✓' : 'Verify KYC'}
+                  </button>
                   <button onClick={() => viewNotifications(selectedUser)} className="action-btn view-notifications">
                     View Notifications
                   </button>
