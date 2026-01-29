@@ -104,6 +104,18 @@ function AdminDashboard() {
   }, [token, API]);
 
   // FETCH PENDING KYC
+  const fetchPendingKYC = useCallback(async () => {
+    try {
+      const res = await axios.get(`${API}/api/user/kyc-pending`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      return res.data || [];
+    } catch (err) {
+      console.error('Failed to fetch pending KYC requests:', err);
+      return [];
+    }
+  }, [token, API]);
+
   const fetchPendingKYCData = useCallback(async () => {
     try {
       const kycData = await fetchPendingKYC();
@@ -324,19 +336,6 @@ function AdminDashboard() {
       console.error(err);
     }
   };
-
-  // FETCH PENDING KYC REQUESTS
-  const fetchPendingKYC = useCallback(async () => {
-    try {
-      const res = await axios.get(`${API}/api/user/kyc-pending`, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      return res.data || [];
-    } catch (err) {
-      console.error('Failed to fetch pending KYC requests:', err);
-      return [];
-    }
-  }, [token, API]);
 
   // FETCH ALL KYC STATUS
   const fetchAllKYC = useCallback(async () => {
