@@ -161,6 +161,69 @@ router.post('/invest', verifyToken, async (req, res) => {
   }
 });
 
+// === POST: Break Investment ===
+router.post('/break/:investmentId', verifyToken, async (req, res) => {
+  try {
+    const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const investmentId = req.params.investmentId;
+    const investmentIndex = user.investments.findIndex(inv => inv._id.toString() === investmentId);
+
+    if (investmentIndex === -1) {
+      return res.status(404).json({ message: 'Investment not found' });
+    }
+
+    const investment = user.investments[investmentIndex];
+
+    // Check if user has at least $10,000 in savings
+    if (user.balance.savings < 10000) {
+      return res.status(400).json({ 
+        message: 'You need at least $10,000 in your savings account to break and withdraw an investment.' 
+      });
+    }
+
+    // Add full investment amount to checking account (no penalty)
+    user.balance.checking += investment.amount;
+
+    // Remove the investment
+    user.investments.splice(investmentIndex, 1);
+
+    // Create transaction record
+    const transaction = new Transaction({
+      userId: user._id,
+      type: 'investment_break',
+      amount: investment.amount,
+      method: 'withdrawal',
+      status: 'Completed',
+      account: 'checking',
+      date: new Date(),
+      description: 'Investment broken and withdrawn'
+    });
+
+    await transaction.save();
+
+    // Add notification
+    user.notifications.push({
+      message: `Investment broken successfully. $${investment.amount.toLocaleString()} added to checking account`,
+      type: 'investment_break',
+      date: new Date(),
+    });
+
+    await user.save();
+
+    res.json({
+      message: 'Investment broken successfully!',
+      amountReceived: investment.amount,
+      balance: user.balance
+    });
+
+  } catch (err) {
+    console.error('Break investment error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // === GET: User Investments (Optional - if you want separate endpoint) ===
 router.get('/my', verifyToken, async (req, res) => {
   try {

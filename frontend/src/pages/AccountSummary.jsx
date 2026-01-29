@@ -2,13 +2,14 @@ import { useEffect, useState, useCallback } from 'react';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import LoadingSkeleton from '../components/LoadingSkeleton';
-import { FaWallet, FaUniversity, FaCoins } from 'react-icons/fa';
+import { FaWallet, FaUniversity, FaCoins, FaChartLine } from 'react-icons/fa';
 import '../styles/AccountSummary.css';
 import API_BASE_URL from '../config/api';
 
 
 function AccountSummary() {
   const [balances, setBalances] = useState({ checking: 0, savings: 0, usdt: 0 });
+  const [investments, setInvestments] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const fetch = useCallback(async () => {
@@ -17,12 +18,13 @@ function AccountSummary() {
       const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      const { balance } = res.data;
+      const { balance, investments } = res.data;
       setBalances({
         checking: balance?.checking || 0,
         savings: balance?.savings || 0,
         usdt: balance?.usdt || 0,
       });
+      setInvestments(investments || []);
     } catch (err) {
       toast.error('Failed to load balances');
     } finally {
@@ -35,6 +37,9 @@ function AccountSummary() {
   }, [fetch]);
 
   if (loading) return <LoadingSkeleton />;
+
+  // Calculate total investment value
+  const totalInvestments = investments.reduce((sum, inv) => sum + inv.amount, 0);
 
   return (
     <div className="account-summary">
@@ -56,6 +61,11 @@ function AccountSummary() {
           <FaCoins />
           <h4>USDT</h4>
           <p>{Number(balances.usdt).toLocaleString()} USDT</p>
+        </div>
+        <div className="balance-card">
+          <FaChartLine />
+          <h4>Investments</h4>
+          <p>${Number(totalInvestments).toLocaleString()}</p>
         </div>
       </div>
     </div>

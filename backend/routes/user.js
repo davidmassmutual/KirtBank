@@ -533,4 +533,133 @@ router.put('/:userId/balances', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
+// ──────────────────────────────────────────────────────────────
+// ADMIN: User Notification Management
+// ──────────────────────────────────────────────────────────────
+
+// GET: Get user notifications
+router.get('/:userId/notifications', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId).select('notifications');
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    res.json(user.notifications || []);
+  } catch (err) {
+    console.error('Get user notifications error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// POST: Add notification to user
+router.post('/:userId/notifications', verifyToken, isAdmin, async (req, res) => {
+  const { message, type } = req.body;
+
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    if (!message) {
+      return res.status(400).json({ message: 'Notification message is required' });
+    }
+
+    const notification = {
+      message,
+      type: type || 'admin',
+      date: new Date(),
+      read: false
+    };
+
+    user.notifications.push(notification);
+    await user.save();
+
+    await logAdminNotification(req.userId, `Added notification to ${user.name} (${user.email}): ${message}`);
+
+    res.json({
+      message: 'Notification added successfully',
+      notification
+    });
+  } catch (err) {
+    console.error('Add notification error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PUT: Edit user notification
+router.put('/:userId/notifications/:notificationId', verifyToken, isAdmin, async (req, res) => {
+  const { message, type, read } = req.body;
+
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const notificationIndex = user.notifications.findIndex(
+      n => n._id.toString() === req.params.notificationId
+    );
+
+    if (notificationIndex === -1) {
+      return res.status(404).json({ message: 'Notification not found' });
+    }
+
+    if (message !== undefined) user.notifications[notificationIndex].message = message;
+    if (type !== undefined) user.notifications[notificationIndex].type = type;
+    if (read !== undefined) user.notifications[notificationIndex].read = Boolean(read);
+
+    await user.save();
+
+    await logAdminNotification(req.userId, `Edited notification for ${user.name} (${user.email})`);
+
+    res.json({
+      message: 'Notification updated successfully',
+      notification: user.notifications[notificationIndex]
+    });
+  } catch (err) {
+    console.error('Edit notification error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// DELETE: Delete user notification
+router.delete('/:userId/notifications/:notificationId', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    const initialLength = user.notifications.length;
+    user.notifications = user.notifications.filter(
+      n => n._id.toString() !== req.params.notificationId
+    );
+
+    if (user.notifications.length === initialLength) {
+      return res.status(404).json({ message: 'Notification not found' });
+    }
+
+    await user.save();
+
+    await logAdminNotification(req.userId, `Deleted notification for ${user.name} (${user.email})`);
+
+    res.json({ message: 'Notification deleted successfully' });
+  } catch (err) {
+    console.error('Delete notification error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// PUT: Mark all user notifications as read
+router.put('/:userId/notifications/read-all', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const user = await User.findById(req.params.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    user.notifications.forEach(n => n.read = true);
+    await user.save();
+
+    await logAdminNotification(req.userId, `Marked all notifications as read for ${user.name} (${user.email})`);
+
+    res.json({ message: 'All notifications marked as read' });
+  } catch (err) {
+    console.error('Mark all notifications as read error:', err.message);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 module.exports = router;

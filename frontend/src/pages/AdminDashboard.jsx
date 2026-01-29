@@ -34,6 +34,7 @@ function AdminDashboard() {
   const [showPopup, setShowPopup] = useState(false);
   const [popupMsg, setPopupMsg] = useState('');
   const [userDocuments, setUserDocuments] = useState(null);
+  const [userNotifications, setUserNotifications] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showLoanInfo, setShowLoanInfo] = useState(false);
   const navigate = useNavigate();
@@ -381,6 +382,102 @@ function AdminDashboard() {
     }
   };
 
+  // VIEW USER NOTIFICATIONS
+  const viewNotifications = async (user) => {
+    try {
+      const res = await axios.get(`${API}/api/user/${user._id}/notifications`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUserNotifications({user, notifications: res.data});
+    } catch (err) {
+      toast.error('Failed to load user notifications');
+      console.error(err);
+    }
+  };
+
+  // ADD USER NOTIFICATION
+  const addUserNotification = async (userId, message, type) => {
+    try {
+      const res = await axios.post(`${API}/api/user/${userId}/notifications`, {
+        message,
+        type
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Notification added successfully');
+      if (userNotifications && userNotifications.user._id === userId) {
+        setUserNotifications(prev => ({
+          ...prev,
+          notifications: [...prev.notifications, res.data.notification]
+        }));
+      }
+      fetchUsers(search, page);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to add notification');
+      console.error(err);
+    }
+  };
+
+  // EDIT USER NOTIFICATION
+  const editUserNotification = async (userId, notificationId, updates) => {
+    try {
+      const res = await axios.put(`${API}/api/user/${userId}/notifications/${notificationId}`, updates, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Notification updated successfully');
+      if (userNotifications && userNotifications.user._id === userId) {
+        setUserNotifications(prev => ({
+          ...prev,
+          notifications: prev.notifications.map(n => 
+            n._id === notificationId ? res.data.notification : n
+          )
+        }));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update notification');
+      console.error(err);
+    }
+  };
+
+  // DELETE USER NOTIFICATION
+  const deleteUserNotification = async (userId, notificationId) => {
+    if (!window.confirm('Delete this notification?')) return;
+    try {
+      await axios.delete(`${API}/api/user/${userId}/notifications/${notificationId}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Notification deleted successfully');
+      if (userNotifications && userNotifications.user._id === userId) {
+        setUserNotifications(prev => ({
+          ...prev,
+          notifications: prev.notifications.filter(n => n._id !== notificationId)
+        }));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to delete notification');
+      console.error(err);
+    }
+  };
+
+  // MARK ALL NOTIFICATIONS AS READ
+  const markAllNotificationsAsRead = async (userId) => {
+    try {
+      await axios.put(`${API}/api/user/${userId}/notifications/read-all`, {}, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('All notifications marked as read');
+      if (userNotifications && userNotifications.user._id === userId) {
+        setUserNotifications(prev => ({
+          ...prev,
+          notifications: prev.notifications.map(n => ({ ...n, read: true }))
+        }));
+      }
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to mark notifications as read');
+      console.error(err);
+    }
+  };
+
   if (loading) return <LoadingSkeleton />;
 
   return (
@@ -593,6 +690,9 @@ function AdminDashboard() {
                   <button onClick={() => viewDocuments(selectedUser)} className="action-btn view-documents">
                     View Documents
                   </button>
+                  <button onClick={() => viewNotifications(selectedUser)} className="action-btn view-notifications">
+                    View Notifications
+                  </button>
                   <button onClick={() => setShowLoanInfo(!showLoanInfo)} className="action-btn manage-loans">
                     {showLoanInfo ? 'Hide Loan Info' : 'Manage Loans'}
                   </button>
@@ -790,6 +890,105 @@ function AdminDashboard() {
                   </div>
                 </div>
               )}
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* USER NOTIFICATIONS MODAL */}
+      {userNotifications && (
+        <div className="modal-overlay" onClick={() => setUserNotifications(null)}>
+          <div className="modal large" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Notifications - {userNotifications.user.name} ({userNotifications.user.email})</h3>
+              <button onClick={() => setUserNotifications(null)} className="close-btn"><FaTimes /></button>
+            </div>
+
+            <div className="notifications-actions">
+              <button 
+                onClick={() => markAllNotificationsAsRead(userNotifications.user._id)}
+                className="mark-all-read-btn"
+              >
+                Mark All as Read
+              </button>
+            </div>
+
+            <div className="notifications-list">
+              {userNotifications.notifications.length === 0 ? (
+                <p className="empty">No notifications found.</p>
+              ) : (
+                <table className="notifications-table">
+                  <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Message</th>
+                      <th>Type</th>
+                      <th>Status</th>
+                      <th>Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {userNotifications.notifications.map(n => (
+                      <tr key={n._id}>
+                        <td>{new Date(n.date).toLocaleDateString()}</td>
+                        <td className="notification-message">{n.message}</td>
+                        <td><span className={`type-badge ${n.type}`}>{n.type}</span></td>
+                        <td><span className={`status-badge ${n.read ? 'read' : 'unread'}`}>{n.read ? 'Read' : 'Unread'}</span></td>
+                        <td className="notification-actions">
+                          <button 
+                            onClick={() => editUserNotification(userNotifications.user._id, n._id, { read: !n.read })}
+                            className="toggle-read-btn"
+                          >
+                            {n.read ? 'Mark Unread' : 'Mark Read'}
+                          </button>
+                          <button 
+                            onClick={() => editUserNotification(userNotifications.user._id, n._id, { type: n.type === 'admin' ? 'info' : 'admin' })}
+                            className="edit-type-btn"
+                          >
+                            Change Type
+                          </button>
+                          <button 
+                            onClick={() => deleteUserNotification(userNotifications.user._id, n._id)}
+                            className="delete-btn"
+                          >
+                            <FaTrash />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              )}
+            </div>
+
+            <div className="add-notification-card">
+              <h4><FaPlus /> Add New Notification</h4>
+              <form 
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  const formData = new FormData(e.target);
+                  const message = formData.get('message');
+                  const type = formData.get('type');
+                  if (message && message.trim()) {
+                    addUserNotification(userNotifications.user._id, message.trim(), type);
+                    e.target.reset();
+                  }
+                }}
+                className="notification-form"
+              >
+                <input 
+                  name="message" 
+                  placeholder="Enter notification message..." 
+                  required 
+                />
+                <select name="type" defaultValue="admin">
+                  <option value="admin">Admin</option>
+                  <option value="info">Info</option>
+                  <option value="warning">Warning</option>
+                  <option value="success">Success</option>
+                </select>
+                <button type="submit" className="add-btn">Add Notification</button>
+              </form>
             </div>
           </div>
         </div>

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 import AccountSummary from './AccountSummary';
 import LoanBanner from '../components/LoanBanner';
 import CurrencyConverter from '../components/CurrencyConverter';
@@ -93,8 +94,20 @@ function Dashboard() {
 
 
 
-      {/* KYC WARNING */}
-      {userData?.kycStatus !== 'verified' && (
+      {/* KYC STATUS */}
+      {userData?.kycStatus === 'verified' ? (
+        <div className="kyc-verified">
+          <p><span className="verified-badge">✓ VERIFIED</span> Your KYC has been verified</p>
+        </div>
+      ) : userData?.kycStatus === 'submitted' ? (
+        <div className="kyc-pending">
+          <p><span className="pending-badge">⏳ PENDING</span> KYC under review</p>
+        </div>
+      ) : userData?.kycStatus === 'rejected' ? (
+        <div className="kyc-rejected">
+          <p><span className="rejected-badge">✗ REJECTED</span> Your KYC was rejected. <Link to="/kyc">Please resubmit</Link></p>
+        </div>
+      ) : (
         <div className="kyc-warning">
           <p>KYC Pending — Upload ID to <Link to="/kyc">Complete KYC</Link> </p>
         </div>

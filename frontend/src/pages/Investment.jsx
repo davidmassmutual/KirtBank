@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
+import { toast } from 'react-toastify';
 import API_BASE_URL from '../config/api';
 import '../styles/Investment.css'; // Updated CSS file
 
@@ -49,6 +50,36 @@ export default function Investments() {
 
   const handleInvest = (plan) => {
     navigate('/invest', { state: { plan } });
+  };
+
+  const handleBreakInvestment = async (investment) => {
+    // Check if user has at least $10,000 in savings
+    if (userBalance.savings < 10000) {
+      toast.error('You need at least $10,000 in your savings account to break and withdraw an investment.');
+      return;
+    }
+
+    try {
+      const response = await axios.post(
+        `${API_BASE_URL}/api/investments/break/${investment._id}`,
+        {},
+        {
+          headers: { Authorization: `Bearer ${token}` }
+        }
+      );
+
+      toast.success(response.data.message || 'Investment broken successfully!');
+      
+      // Refresh user data
+      const res = await axios.get(`${API_BASE_URL}/api/user`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setUserInvestments(res.data.investments || []);
+      setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to break investment');
+      console.error('Break investment error:', err);
+    }
   };
 
   return (
@@ -138,6 +169,22 @@ export default function Investments() {
                         <p className="amount-label">Expected Profit</p>
                         <p className="amount-profit">+${profit}</p>
                       </div>
+                    </div>
+
+                    {/* Break Investment Button */}
+                    <div className="break-investment-section">
+                      <button 
+                        onClick={() => handleBreakInvestment(inv)}
+                        className="break-investment-btn"
+                        disabled={userBalance.savings < 10000}
+                      >
+                        Break Investment
+                      </button>
+                      {userBalance.savings < 10000 && (
+                        <p className="break-investment-warning">
+                          Need $10,000 in savings to break investment
+                        </p>
+                      )}
                     </div>
                   </div>
                 );

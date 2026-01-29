@@ -1189,3 +1189,133 @@
   color: var(--secondary);
   font-weight: 600;
 }
+
+/* NOTIFICATION MANAGEMENT STYLES */
+.notifications-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 1.5rem;
+}
+
+.mark-all-read-btn {
+  padding: 0.5rem 1rem;
+  background: linear-gradient(135deg, #10b981, #059669);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(16, 185, 129, 0.3);
+}
+
+.mark-all-read-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(16, 185, 129, 0.4);
+}
+
+.notification-actions {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.toggle-read-btn, .edit-type-btn {
+  padding: 0.25rem 0.5rem;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 0.75rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.toggle-read-btn:hover, .edit-type-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.notification-message {
+  max-width: 300px;
+  word-wrap: break-word;
+}
+
+.type-badge {
+  padding: 0.25rem 0.5rem;
+  border-radius: 12px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.type-badge.admin { background: rgba(59, 130, 246, 0.2); color: #3b82f6; }
+.type-badge.info { background: rgba(14, 165, 233, 0.2); color: #0ea5e9; }
+.type-badge.warning { background: rgba(251, 191, 36, 0.2); color: #fbbf24; }
+.type-badge.success { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+
+.status-badge.read { background: rgba(16, 185, 129, 0.2); color: #10b981; }
+.status-badge.unread { background: rgba(255, 193, 7, 0.2); color: #f59e0b; }
+
+/* ADD NOTIFICATION CARD */
+.add-notification-card {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1.5rem;
+  margin-top: 2rem;
+}
+
+.add-notification-card h4 {
+  margin: 0 0 1rem 0;
+  color: var(--text);
+  font-size: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.notification-form {
+  display: grid;
+  grid-template-columns: 1fr 150px auto;
+  gap: 1rem;
+  align-items: end;
+}
+
+.notification-form input {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.notification-form input:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+}
+
+.notification-form select {
+  padding: 0.75rem;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.05);
+  color: var(--text);
+  font-size: 0.95rem;
+  transition: all 0.3s ease;
+}
+
+.notification-form select:focus {
+  outline: none;
+  border-color: var(--gold);
+  box-shadow: 0 0 0 3px rgba(255, 193, 7, 0.1);
+}
+
+/* RESPONSIVE NOTIFICATION STYLES */
+@media (max-width: 768px) {
+  .notification-form { grid-template-columns: 1fr; }
+  .notifications-table { font-size: 0.8rem; }
+  .notifications-table th, .notifications-table td { padding: 0.5rem; }
+}
