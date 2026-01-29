@@ -14,41 +14,15 @@ import QuickStats from '../components/QuickStats';
 import ActivityFeed from '../components/ActivityFeed';
 import img9 from '../images/WhatsApp Image 2025-10-17 at 16.15.27.jpeg';
 import { useDeposit } from '../context/DepositContext';
+import { useUser } from '../context/UserContext';
 import { FaPlus, FaChartLine, FaExchangeAlt, FaCreditCard, FaBell } from 'react-icons/fa';
 import '../styles/Dashboard.css';
 import API_BASE_URL from '../config/api';
 
 function Dashboard() {
-  const [userData, setUserData] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { userData, loading, refreshUserData } = useUser();
   const [showNotifications, setShowNotifications] = useState(false);
-  const navigate = useNavigate();
   const { openDepositModal, isModalOpen, closeDepositModal } = useDeposit();
-
-  useEffect(() => {
-    window.scrollTo(0, 0);
-    const fetchData = async () => {
-      try {
-        const token = localStorage.getItem('token');
-        if (!token) throw new Error('No token');
-        const res = await axios.get(`${API_BASE_URL}/api/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUserData(res.data);
-      } catch (err) {
-        if (err.response?.status === 401) {
-          localStorage.removeItem('token');
-          toast.error('Session expired');
-          navigate('/');
-        } else {
-          toast.error('Failed to load data');
-        }
-      } finally {
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, [navigate]);
 
   if (loading) return <LoadingSkeleton />;
 

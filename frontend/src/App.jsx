@@ -23,6 +23,7 @@ import './styles/App.css';
 import NotFound from './pages/NotFound';
 import LoadingSkeleton from './components/LoadingSkeleton';
 import { DepositProvider } from './context/DepositContext';
+import { UserProvider } from './context/UserContext';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import Profile from './pages/Profile';
 import Investment from './pages/Investment';

@@ -181,15 +181,9 @@ export default function Investments() {
                       <button 
                         onClick={() => handleBreakInvestment(inv)}
                         className="break-investment-btn"
-                        disabled={userBalance.savings < 10000}
                       >
                         Break Investment
                       </button>
-                      {userBalance.savings < 10000 && (
-                        <p className="break-investment-warning">
-                          Need $10,000 in savings to break investment
-                        </p>
-                      )}
                     </div>
                   </div>
                 );

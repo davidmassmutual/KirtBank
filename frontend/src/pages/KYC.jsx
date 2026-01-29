@@ -3,11 +3,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
+import { useUser } from '../context/UserContext';
 import '../styles/KYC.css';
 import API_BASE_URL from '../config/api';
 import { FaShieldAlt, FaCheckCircle, FaUpload, FaLock, FaUser, FaCreditCard } from 'react-icons/fa';
 
 const KYC = () => {
+  const { refreshUserData } = useUser();
   const [kycStatus, setKycStatus] = useState('pending'); // pending, submitted, verified, rejected
   const [idFile, setIdFile] = useState(null);
   const [ssn, setSsn] = useState('');
@@ -88,6 +90,9 @@ const KYC = () => {
 
       setKycStatus('submitted');
       setSuccess('KYC documents submitted successfully! Verification may take 1-2 business days.');
+      
+      // Refresh user data to update KYC status across the app
+      refreshUserData();
     } catch (err) {
       setError(err.response?.data?.message || 'Failed to submit KYC documents');
     } finally {
