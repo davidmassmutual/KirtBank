@@ -53,48 +53,87 @@ export default function Investments() {
   };
 
   const handleBreakInvestment = async (investment) => {
-    if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
-      return;
-    }
-
-    try {
-      // Use POST instead of GET for the break investment endpoint
-      await axios.post(
-        `${API_BASE_URL}/api/investments/break/${investment._id}`,
-        {},
-        {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-          },
-        }
-      );
-
-      // Show success message directly on the card
-      investment.breakSuccess = 'Investment broken successfully!';
-      investment.breakError = '';
-      setUserInvestments([...userInvestments]);
+    // Create a custom confirmation modal instead of browser confirm
+    const customConfirm = document.createElement('div');
+    customConfirm.className = 'custom-confirm-modal';
+    customConfirm.innerHTML = `
+      <div class="custom-confirm-overlay">
+        <div class="custom-confirm-content">
+          <h3>Break Investment</h3>
+          <p>Are you sure you want to break this investment? You will receive the full amount back to your checking account.</p>
+          <div class="custom-confirm-buttons">
+            <button class="custom-confirm-btn custom-confirm-cancel">Cancel</button>
+            <button class="custom-confirm-btn custom-confirm-confirm">Yes, Break Investment</button>
+          </div>
+        </div>
+      </div>
+    `;
+    
+    document.body.appendChild(customConfirm);
+    
+    return new Promise((resolve) => {
+      const cancelBtn = customConfirm.querySelector('.custom-confirm-cancel');
+      const confirmBtn = customConfirm.querySelector('.custom-confirm-confirm');
       
-      // Refresh user data to update balance and investments
-      if (token) {
-        axios.get(`${API_BASE_URL}/api/user`, {
-          headers: { Authorization: `Bearer ${token}` }
-        })
-          .then(res => {
-            setUserInvestments(res.data.investments || []);
-            setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
-          })
-          .catch(err => {
-            console.error('Failed to refresh user data:', err.response || err);
-          });
+      const closeModal = () => {
+        if (customConfirm.parentNode) {
+          customConfirm.parentNode.removeChild(customConfirm);
+        }
+      };
+      
+      cancelBtn.addEventListener('click', () => {
+        closeModal();
+        resolve(false);
+      });
+      
+      confirmBtn.addEventListener('click', () => {
+        closeModal();
+        resolve(true);
+      });
+    }).then(async (confirmed) => {
+      if (!confirmed) {
+        return;
       }
-    } catch (error) {
-      // Show error message directly on the card
-      investment.breakError = error.response?.status === 400 
-        ? 'You need at least $10,000 in your savings account to break an investment'
-        : error.response?.data?.message || 'Failed to break investment';
-      investment.breakSuccess = '';
-      setUserInvestments([...userInvestments]);
-    }
+
+      try {
+        // Use POST instead of GET for the break investment endpoint
+        await axios.post(
+          `${API_BASE_URL}/api/investments/break/${investment._id}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem('token')}`,
+            },
+          }
+        );
+
+        // Show success message directly on the card
+        investment.breakSuccess = 'Investment broken successfully!';
+        investment.breakError = '';
+        setUserInvestments([...userInvestments]);
+        
+        // Refresh user data to update balance and investments
+        if (token) {
+          axios.get(`${API_BASE_URL}/api/user`, {
+            headers: { Authorization: `Bearer ${token}` }
+          })
+            .then(res => {
+              setUserInvestments(res.data.investments || []);
+              setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
+            })
+            .catch(err => {
+              console.error('Failed to refresh user data:', err.response || err);
+            });
+        }
+      } catch (error) {
+        // Show error message directly on the card
+        investment.breakError = error.response?.status === 400 
+          ? 'You need at least $10,000 in your savings account to break an investment'
+          : error.response?.data?.message || 'Failed to break investment';
+        investment.breakSuccess = '';
+        setUserInvestments([...userInvestments]);
+      }
+    });
   };
 
   return (

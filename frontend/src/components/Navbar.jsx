@@ -90,7 +90,7 @@ function Navbar({ handleLogout, isAuthenticated }) {
                   }}
                 />
               ) : null}
-              <div className="navbar-profile-placeholder" style={{ display: user?.profileImage ? 'none' : 'flex' }}>
+              <div className="navbar-profile-placeholder" style={{ display: !user?.profileImage ? 'flex' : 'none' }}>
                 <FaUserTie />
               </div>
               <span className="welcome-text">
