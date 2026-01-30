@@ -14,22 +14,23 @@ import QuickStats from '../components/QuickStats';
 import ActivityFeed from '../components/ActivityFeed';
 import img9 from '../images/WhatsApp Image 2025-10-17 at 16.15.27.jpeg';
 import { useDeposit } from '../context/DepositContext';
-import { useUser } from '../context/UserContext';
+import { useAuth } from '../context/AuthContext';
 import { FaPlus, FaChartLine, FaExchangeAlt, FaCreditCard, FaBell } from 'react-icons/fa';
 import '../styles/Dashboard.css';
 import API_BASE_URL from '../config/api';
 
 function Dashboard() {
-  const userContext = useUser();
-  const { userData, loading, refreshUserData } = userContext || {};
+  const { user, loading, fetchUser } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
   const { openDepositModal, isModalOpen, closeDepositModal } = useDeposit();
 
   if (loading) return <LoadingSkeleton />;
   
-  // Add safety check for userData
-  if (!userData) {
-    return <div className="loading-user-data">Loading user data...</div>;
+  // Add safety check for user data - redirect to login if not authenticated
+  if (!user) {
+    // If no user data and not loading, redirect to login
+    window.location.href = '/';
+    return null;
   }
 
   return (
@@ -44,16 +45,16 @@ function Dashboard() {
       <div className="notifications-bell">
         <button onClick={() => setShowNotifications(!showNotifications)} className="bell-icon">
           <FaBell />
-          {userData?.notifications?.length > 0 && (
-            <span className="notification-badge">{userData.notifications.length}</span>
+          {user?.notifications?.length > 0 && (
+            <span className="notification-badge">{user.notifications.length}</span>
           )}
         </button>
 
         {showNotifications && (
           <div className="notifications-panel glass">
             <h3>Notifications</h3>
-            {userData.notifications?.length > 0 ? (
-              userData.notifications
+            {user.notifications?.length > 0 ? (
+              user.notifications
                 .sort((a, b) => new Date(b.date) - new Date(a.date)) // Sort by most recent
                 .slice(0, 2) // Show latest 2 notifications
                 .map((n, i) => (
@@ -75,15 +76,15 @@ function Dashboard() {
 
 
       {/* KYC STATUS */}
-      {userData?.kycStatus === 'verified' ? (
+      {user?.kycStatus === 'verified' ? (
         <div className="kyc-verified">
           <p><span className="verified-badge">✓ VERIFIED</span> Your KYC has been verified</p>
         </div>
-      ) : userData?.kycStatus === 'submitted' ? (
+      ) : user?.kycStatus === 'submitted' ? (
         <div className="kyc-pending">
           <p><span className="pending-badge">⏳ PENDING</span> KYC under review</p>
         </div>
-      ) : userData?.kycStatus === 'rejected' ? (
+      ) : user?.kycStatus === 'rejected' ? (
         <div className="kyc-rejected">
           <p><span className="rejected-badge">✗ REJECTED</span> Your KYC was rejected. <Link to="/kyc">Please resubmit</Link></p>
         </div>
@@ -129,12 +130,12 @@ function Dashboard() {
         </div>
       {/* QUICK STATS */}
       <div className="quick-stats-wrapper">
-        <QuickStats balance={userData?.balance} />
+        <QuickStats balance={user?.balance} />
       </div>
 
       {/* RECENT ACTIVITY */}
       <div className="activity-feed-wrapper">
-        <ActivityFeed userId={userData?._id} />
+        <ActivityFeed userId={user?._id} />
         <div className="view-all-activity">
           <Link to="/transactions" className="view-all-btn">
             View All Activity
@@ -149,8 +150,8 @@ function Dashboard() {
         </div>
         <div className="feature-card glass">
           <SecurityDisplay 
-            lastLogin={userData?.lastLogin} 
-            twoFactorEnabled={userData?.twoFactorEnabled} 
+            lastLogin={user?.lastLogin} 
+            twoFactorEnabled={user?.twoFactorEnabled} 
           />
         </div>
       </div>

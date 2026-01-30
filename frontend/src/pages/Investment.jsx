@@ -54,18 +54,12 @@ export default function Investments() {
 
   const handleBreakInvestment = async (investment) => {
     try {
-      const response = await axios.get(`${API_BASE_URL}/api/investments/break/${investment._id}`, {
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem('token')}`,
-        },
-      });
-
       if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
         return;
       }
 
-      // If validation passed, proceed with breaking the investment
-      await axios.put(
+      // Use POST instead of GET for the break investment endpoint
+      await axios.post(
         `${API_BASE_URL}/api/investments/break/${investment._id}`,
         {},
         {
@@ -76,8 +70,19 @@ export default function Investments() {
       );
 
       toast.success('Investment broken successfully!');
-      fetchInvestments();
-      fetchUser();
+      // Refresh user data to update balance and investments
+      if (token) {
+        axios.get(`${API_BASE_URL}/api/user`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+          .then(res => {
+            setUserInvestments(res.data.investments || []);
+            setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
+          })
+          .catch(err => {
+            console.error('Failed to refresh user data:', err.response || err);
+          });
+      }
     } catch (error) {
       if (error.response?.status === 400) {
         toast.error('You need at least $10,000 in your savings account to break an investment');
@@ -114,33 +119,6 @@ export default function Investments() {
             </div>
           </div>
         )}
-
-        {/* INVESTMENT PLANS */}
-        <div className="plans-section">
-          <h2 className="section-title">Choose an Investment Plan</h2>
-          <div className="plans-grid">
-            {plans.length === 0 ? (
-              <p className="loading-text">Loading investment plans...</p>
-            ) : (
-              plans.map(plan => (
-                <div key={plan.name} className="plan-card glass">
-                  <div className="plan-header">
-                    <h3 className="plan-name">{plan.name}</h3>
-                    <div className="plan-roi">{Math.ceil(plan.rate * 100 * 1.8)}%</div>
-                    <span className="roi-label">ROI</span>
-                  </div>
-                  <div className="plan-body">
-                    <p className="plan-term">{plan.term}</p>
-                    <p className="plan-range">${plan.min.toLocaleString()} – ${plan.max.toLocaleString()}</p>
-                    <button onClick={() => handleInvest(plan)} className="invest-btn">
-                      Invest Now →
-                    </button>
-                  </div>
-                </div>
-              ))
-            )}
-          </div>
-        </div>
 
         {/* ACTIVE INVESTMENTS */}
         {userInvestments.length > 0 && (
@@ -191,6 +169,33 @@ export default function Investments() {
             </div>
           </div>
         )}
+
+        {/* INVESTMENT PLANS */}
+        <div className="plans-section">
+          <h2 className="section-title">Choose an Investment Plan</h2>
+          <div className="plans-grid">
+            {plans.length === 0 ? (
+              <p className="loading-text">Loading investment plans...</p>
+            ) : (
+              plans.map(plan => (
+                <div key={plan.name} className="plan-card glass">
+                  <div className="plan-header">
+                    <h3 className="plan-name">{plan.name}</h3>
+                    <div className="plan-roi">{Math.ceil(plan.rate * 100 * 1.8)}%</div>
+                    <span className="roi-label">ROI</span>
+                  </div>
+                  <div className="plan-body">
+                    <p className="plan-term">{plan.term}</p>
+                    <p className="plan-range">${plan.min.toLocaleString()} – ${plan.max.toLocaleString()}</p>
+                    <button onClick={() => handleInvest(plan)} className="invest-btn">
+                      Invest Now →
+                    </button>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
+        </div>
       </div>
     </div>
   );

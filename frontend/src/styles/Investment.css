@@ -43,9 +43,6 @@
 
 .summary-card:hover {
   transform: translateY(-10px);
-  box-shadow: 
-    0 30px 60px rgba(255, 193, 7, 0.3),
-    0 0 40px rgba(59, 130, 246, 0.2);
   border-color: rgba(59, 130, 246, 0.5);
 }
 
@@ -101,9 +98,6 @@
     linear-gradient(var(--card-bg), var(--card-bg)),
     linear-gradient(135deg, var(--navy) 0%, var(--navy-light) 50%, var(--secondary) 100%);
   background-origin: padding-box, border-box;
-  box-shadow:
-    0 15px 40px rgba(31, 41, 55, 0.15),
-    inset 0 0 30px rgba(31, 41, 55, 0.08);
   transition: all 0.5s ease;
   position: relative;
 }
@@ -177,13 +171,11 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.4s ease;
-  box-shadow: 0 8px 25px rgba(255, 193, 7, 0.4);
 }
 
 .invest-btn:hover {
   transform: translateY(-5px) scale(1.03);
   background: linear-gradient(135deg, var(--gold-dark), var(--gold));
-  box-shadow: 0 15px 35px rgba(255, 193, 7, 0.5);
 }
 
 /* Active Investments - Vibrant Accents */
@@ -199,17 +191,11 @@
   backdrop-filter: blur(20px);
   border-left: 10px solid var(--gold);
   border: 2px solid rgba(255, 193, 7, 0.25);
-  box-shadow: 
-    0 15px 35px rgba(0, 0, 0, 0.12),
-    inset 0 0 25px rgba(16, 185, 129, 0.05);
   transition: all 0.5s ease;
 }
 
 .active-card:hover {
   transform: translateX(12px);
-  box-shadow: 
-    0 25px 50px rgba(255, 193, 7, 0.25),
-    0 0 40px rgba(16, 185, 129, 0.2);
   border-color: rgba(59, 130, 246, 0.3);
 }
 
@@ -255,9 +241,6 @@
   height: 100%;
   background: linear-gradient(90deg, var(--gold), var(--success));
   border-radius: 6px;
-  box-shadow: 
-    0 0 20px rgba(255, 193, 7, 0.6),
-    0 0 30px rgba(16, 185, 129, 0.4);
   transition: width 0.6s ease;
 }
 
@@ -308,20 +291,17 @@
   font-weight: 700;
   cursor: pointer;
   transition: all 0.4s ease;
-  box-shadow: 0 8px 25px rgba(239, 68, 68, 0.4);
 }
 
 .break-investment-btn:hover:not(:disabled) {
   transform: translateY(-3px) scale(1.02);
   background: linear-gradient(135deg, #dc2626, #b91c1c);
-  box-shadow: 0 15px 35px rgba(239, 68, 68, 0.5);
 }
 
 .break-investment-btn:disabled {
   background: linear-gradient(135deg, #9ca3af, #6b7280);
   cursor: not-allowed;
   transform: none;
-  box-shadow: none;
   opacity: 0.6;
 }
 

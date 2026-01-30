@@ -82,12 +82,17 @@ function Navbar({ handleLogout, isAuthenticated }) {
                   src={`${API_BASE_URL}${user.profileImage}`}
                   alt="Profile"
                   className="navbar-profile-image"
+                  onError={(e) => {
+                    // Fallback to placeholder if image fails to load
+                    e.target.style.display = 'none';
+                    const placeholder = e.target.nextElementSibling;
+                    if (placeholder) placeholder.style.display = 'flex';
+                  }}
                 />
-              ) : (
-                <div className="navbar-profile-placeholder">
-                  <FaUserTie />
-                </div>
-              )}
+              ) : null}
+              <div className="navbar-profile-placeholder" style={{ display: user?.profileImage ? 'none' : 'flex' }}>
+                <FaUserTie />
+              </div>
               <span className="welcome-text">
                 Welcome, {user?.name?.split(' ')[0] || 'User'}
               </span>
