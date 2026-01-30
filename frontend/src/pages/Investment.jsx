@@ -3,7 +3,6 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext';
-import { toast } from 'react-toastify';
 import API_BASE_URL from '../config/api';
 import '../styles/Investment.css'; // Updated CSS file
 
@@ -11,7 +10,9 @@ export default function Investments() {
   const [plans, setPlans] = useState([]);
   const [userInvestments, setUserInvestments] = useState([]);
   const [userBalance, setUserBalance] = useState({ checking: 0, savings: 0, usdt: 0 });
-  const { token } = useAuth();
+  const [breakInvestmentError, setBreakInvestmentError] = useState('');
+  const [breakInvestmentSuccess, setBreakInvestmentSuccess] = useState('');
+  const { user, token } = useAuth();
   const navigate = useNavigate();
 
   const totalInvested = userInvestments.reduce((sum, inv) => sum + inv.amount, 0);
@@ -24,7 +25,7 @@ export default function Investments() {
         if (Array.isArray(res.data)) {
           setPlans(res.data);
         } else {
-          console.error, console.error('Expected array for plans:', res.data);
+          console.error('Expected array for plans:', res.data);
           setPlans([]);
         }
       })
@@ -39,6 +40,7 @@ export default function Investments() {
         headers: { Authorization: `Bearer ${token}` }
       })
         .then(res => {
+          console.log('User data received:', res.data);
           setUserInvestments(res.data.investments || []);
           setUserBalance(res.data.balance || { checking: 0, savings: 0, usdt: 0 });
         })
@@ -53,11 +55,15 @@ export default function Investments() {
   };
 
   const handleBreakInvestment = async (investment) => {
-    try {
-      if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
-        return;
-      }
+    // Clear previous messages
+    setBreakInvestmentError('');
+    setBreakInvestmentSuccess('');
 
+    if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
+      return;
+    }
+
+    try {
       // Use POST instead of GET for the break investment endpoint
       await axios.post(
         `${API_BASE_URL}/api/investments/break/${investment._id}`,
@@ -69,7 +75,8 @@ export default function Investments() {
         }
       );
 
-      toast.success('Investment broken successfully!');
+      setBreakInvestmentSuccess('Investment broken successfully!');
+      
       // Refresh user data to update balance and investments
       if (token) {
         axios.get(`${API_BASE_URL}/api/user`, {
@@ -85,9 +92,9 @@ export default function Investments() {
       }
     } catch (error) {
       if (error.response?.status === 400) {
-        toast.error('You need at least $10,000 in your savings account to break an investment');
+        setBreakInvestmentError('You need at least $10,000 in your savings account to break an investment');
       } else {
-        toast.error(error.response?.data?.message || 'Failed to break investment');
+        setBreakInvestmentError(error.response?.data?.message || 'Failed to break investment');
       }
     }
   };
@@ -124,6 +131,19 @@ export default function Investments() {
         {userInvestments.length > 0 && (
           <div className="active-section">
             <h2 className="section-title">Your Active Investments</h2>
+            
+            {/* Inline Notifications */}
+            {breakInvestmentError && (
+              <div className="inline-error-notification">
+                {breakInvestmentError}
+              </div>
+            )}
+            {breakInvestmentSuccess && (
+              <div className="inline-success-notification">
+                {breakInvestmentSuccess}
+              </div>
+            )}
+            
             <div className="active-grid">
               {userInvestments.map((inv, i) => {
                 const profit = (inv.amount * inv.rate).toFixed(2);

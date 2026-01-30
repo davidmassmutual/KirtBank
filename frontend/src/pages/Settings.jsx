@@ -147,35 +147,11 @@ function Settings() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      // Refresh user data to update navbar
+      // Refresh user data to update navbar and form fields
       await fetchSettings();
       await fetchUser(); // Update global state
 
-      setSuccess('Profile updated successfully!');
-
-{error && (
-
-  <div className="error-message">
-
-    <FaExclamationCircle />
-
-    {error}
-
-  </div>
-
-)}
-
-{success && (
-
-  <div className="success-message">
-
-    <FaCheckCircle />
-
-    {success}
-
-  </div>
-
-)}
+      toast.success('Profile updated successfully!');
 
     } catch (err) {
       toast.error(err.response?.data?.message || 'Update failed');
