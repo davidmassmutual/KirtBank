@@ -39,7 +39,7 @@ function AccountSummary() {
   if (loading) return <LoadingSkeleton />;
 
   // Calculate total investment value
-  const totalInvestments = investments.reduce((sum, inv) => sum + inv.amount, 0);
+  const totalInvestments = investments.reduce((sum, inv) => sum + (inv.amount || 0), 0);
 
   return (
     <div className="account-summary">

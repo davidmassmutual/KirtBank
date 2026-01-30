@@ -27,7 +27,7 @@ export default function QuickStats({ balance }) {
     fetchInvestments();
   }, []);
 
-  const totalInvestments = investments.reduce((sum, inv) => sum + inv.amount, 0);
+  const totalInvestments = investments.reduce((sum, inv) => sum + (inv.amount || 0), 0);
   const total = (balance?.checking || 0) + (balance?.savings || 0) + (balance?.usdt || 0) + totalInvestments;
 
   return (

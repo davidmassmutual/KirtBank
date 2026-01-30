@@ -10,8 +10,6 @@ export default function Investments() {
   const [plans, setPlans] = useState([]);
   const [userInvestments, setUserInvestments] = useState([]);
   const [userBalance, setUserBalance] = useState({ checking: 0, savings: 0, usdt: 0 });
-  const [breakInvestmentError, setBreakInvestmentError] = useState('');
-  const [breakInvestmentSuccess, setBreakInvestmentSuccess] = useState('');
   const { user, token } = useAuth();
   const navigate = useNavigate();
 
@@ -55,10 +53,6 @@ export default function Investments() {
   };
 
   const handleBreakInvestment = async (investment) => {
-    // Clear previous messages
-    setBreakInvestmentError('');
-    setBreakInvestmentSuccess('');
-
     if (!window.confirm('Are you sure you want to break this investment? You will receive the full amount back to your checking account.')) {
       return;
     }
@@ -75,7 +69,10 @@ export default function Investments() {
         }
       );
 
-      setBreakInvestmentSuccess('Investment broken successfully!');
+      // Show success message directly on the card
+      investment.breakSuccess = 'Investment broken successfully!';
+      investment.breakError = '';
+      setUserInvestments([...userInvestments]);
       
       // Refresh user data to update balance and investments
       if (token) {
@@ -91,11 +88,12 @@ export default function Investments() {
           });
       }
     } catch (error) {
-      if (error.response?.status === 400) {
-        setBreakInvestmentError('You need at least $10,000 in your savings account to break an investment');
-      } else {
-        setBreakInvestmentError(error.response?.data?.message || 'Failed to break investment');
-      }
+      // Show error message directly on the card
+      investment.breakError = error.response?.status === 400 
+        ? 'You need at least $10,000 in your savings account to break an investment'
+        : error.response?.data?.message || 'Failed to break investment';
+      investment.breakSuccess = '';
+      setUserInvestments([...userInvestments]);
     }
   };
 
@@ -131,18 +129,6 @@ export default function Investments() {
         {userInvestments.length > 0 && (
           <div className="active-section">
             <h2 className="section-title">Your Active Investments</h2>
-            
-            {/* Inline Notifications */}
-            {breakInvestmentError && (
-              <div className="inline-error-notification">
-                {breakInvestmentError}
-              </div>
-            )}
-            {breakInvestmentSuccess && (
-              <div className="inline-success-notification">
-                {breakInvestmentSuccess}
-              </div>
-            )}
             
             <div className="active-grid">
               {userInvestments.map((inv, i) => {
@@ -182,6 +168,18 @@ export default function Investments() {
                       >
                         Break Investment
                       </button>
+                      
+                      {/* Inline Notifications for this specific investment */}
+                      {inv.breakError && (
+                        <div className="inline-error-notification">
+                          {inv.breakError}
+                        </div>
+                      )}
+                      {inv.breakSuccess && (
+                        <div className="inline-success-notification">
+                          {inv.breakSuccess}
+                        </div>
+                      )}
                     </div>
                   </div>
                 );
