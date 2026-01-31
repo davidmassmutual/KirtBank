@@ -237,27 +237,60 @@ function AdminDashboard() {
     });
   };
 
+  // EDIT INVESTMENT BALANCE
+  const openInvestmentEdit = (user) => {
+    const totalInvestments = user.investments?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0;
+    setEditBal({
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      investments: totalInvestments,
+      type: 'investment'
+    });
+  };
+
   const submitBalance = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.put(
-        `${API}/api/user/${editBal.userId}/balances`,
-        {
-          checkingBalance: Number(editBal.checking),
-          savingsBalance: Number(editBal.savings),
-          usdtBalance: Number(editBal.usdt),
-        },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      if (editBal.type === 'investment') {
+        // Update investment balance
+        const res = await axios.put(
+          `${API}/api/user/${editBal.userId}/investments`,
+          {
+            amount: Number(editBal.investments)
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
 
-      setUsers(prev => prev.map(u =>
-        u._id === editBal.userId
-          ? { ...u, balance: res.data.balance }
-          : u
-      ));
+        setUsers(prev => prev.map(u =>
+          u._id === editBal.userId
+            ? { ...u, investments: res.data.investments }
+            : u
+        ));
 
+        toast.success('Investment balance updated successfully');
+      } else {
+        // Update regular balances
+        const res = await axios.put(
+          `${API}/api/user/${editBal.userId}/balances`,
+          {
+            checkingBalance: Number(editBal.checking),
+            savingsBalance: Number(editBal.savings),
+            usdtBalance: Number(editBal.usdt),
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setUsers(prev => prev.map(u =>
+          u._id === editBal.userId
+            ? { ...u, balance: res.data.balance }
+            : u
+        ));
+
+        toast.success('Balance updated successfully');
+      }
+      
       setEditBal(null);
-      toast.success('Balance updated successfully');
     } catch (err) {
       toast.error(err.response?.data?.message || 'Failed to update balance');
       console.error(err);
@@ -635,6 +668,10 @@ function AdminDashboard() {
                     <span className="balance-label">USDT:</span>
                     <span className="balance-amount">${(selectedUser.balance?.usdt || 0).toLocaleString()}</span>
                   </div>
+                  <div className="balance-item">
+                    <span className="balance-label">Investments:</span>
+                    <span className="balance-amount">${(selectedUser.investments?.reduce((sum, inv) => sum + (inv.amount || 0), 0) || 0).toLocaleString()}</span>
+                  </div>
                 </div>
               </div>
 
@@ -683,6 +720,9 @@ function AdminDashboard() {
                 <div className="action-buttons-grid">
                   <button onClick={() => openBalanceEdit(selectedUser)} className="action-btn edit-balance">
                     Edit Balance
+                  </button>
+                  <button onClick={() => openInvestmentEdit(selectedUser)} className="action-btn edit-investment">
+                    Edit Investment Balance
                   </button>
                   <button onClick={() => openTx(selectedUser)} className="action-btn view-transactions">
                     View Transactions
@@ -738,7 +778,7 @@ function AdminDashboard() {
       )}
 
       {/* BALANCE EDIT MODAL */}
-      {editBal && (
+      {editBal && editBal.type !== 'investment' && (
         <div className="modal-overlay" onClick={() => setEditBal(null)}>
           <div className="modal" onClick={e => e.stopPropagation()}>
             <div className="modal-header">
@@ -757,6 +797,28 @@ function AdminDashboard() {
               <div className="input-group">
                 <label>USDT Balance</label>
                 <input type="number" value={editBal.usdt} onChange={e => setEditBal({...editBal, usdt: e.target.value})} required />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="save-btn">Save Changes</button>
+                <button type="button" onClick={() => setEditBal(null)} className="cancel-btn">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* INVESTMENT BALANCE EDIT MODAL */}
+      {editBal && editBal.type === 'investment' && (
+        <div className="modal-overlay" onClick={() => setEditBal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Investment Balance - {editBal.name} ({editBal.email})</h3>
+              <button onClick={() => setEditBal(null)} className="close-btn"><FaTimes /></button>
+            </div>
+            <form onSubmit={submitBalance} className="balance-form">
+              <div className="input-group">
+                <label>Total Investment Balance</label>
+                <input type="number" value={editBal.investments || 0} onChange={e => setEditBal({...editBal, investments: e.target.value})} required />
               </div>
               <div className="modal-actions">
                 <button type="submit" className="save-btn">Save Changes</button>
