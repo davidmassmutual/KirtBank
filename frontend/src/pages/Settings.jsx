@@ -364,11 +364,11 @@ function Settings() {
             </label>
             <label>
               <FaPhone /> Phone
-              <input name="phone" type="tel" value={profile.phone} onChange={handleProfileChange} disabled={submitting} />
+              <input name="phone" type="tel" value={profile.phone || ''} onChange={handleProfileChange} disabled={submitting} placeholder="Enter your phone number" />
             </label>
             <label>
               <FaMapMarkerAlt /> Address
-              <textarea name="address" rows="3" value={profile.address} onChange={handleProfileChange} disabled={submitting} />
+              <textarea name="address" rows="3" value={profile.address || ''} onChange={handleProfileChange} disabled={submitting} placeholder="Enter your address"></textarea>
             </label>
             <button type="submit" disabled={submitting}>
               <FaSave /> {submitting ? 'Saving…' : 'Save Profile'}

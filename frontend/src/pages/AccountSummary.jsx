@@ -40,6 +40,10 @@ function AccountSummary() {
 
   // Calculate total investment value (same as Investment page)
   const totalInvestments = investments.reduce((sum, inv) => sum + (inv.amount || 0), 0);
+  
+  // Debug logging to see what data we're actually getting
+  console.log('AccountSummary - investments data:', investments);
+  console.log('AccountSummary - totalInvestments calculated:', totalInvestments);
 
   return (
     <div className="account-summary">
