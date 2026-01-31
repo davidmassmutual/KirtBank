@@ -44,6 +44,12 @@ function AccountSummary() {
   // Debug logging to see what data we're actually getting
   console.log('AccountSummary - investments data:', investments);
   console.log('AccountSummary - totalInvestments calculated:', totalInvestments);
+  
+  // Debug individual investment amounts
+  investments.forEach((inv, index) => {
+    console.log(`Investment ${index}:`, inv);
+    console.log(`Investment ${index} amount:`, inv.amount);
+  });
 
   return (
     <div className="account-summary">

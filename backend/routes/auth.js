@@ -22,6 +22,17 @@ router.get('/me', verifyToken, async (req, res) => {
       email: user.email,
       isAdmin: user.isAdmin || false,
       balance: user.balance || { checking: 0, savings: 0, usdt: 0 },
+      investments: user.investments || [],
+      notificationsSettings: user.notificationsSettings || { email: true, sms: false, push: true },
+      currency: user.currency || 'USD',
+      theme: user.theme || 'light',
+      profileImage: user.profileImage,
+      kycStatus: user.kycStatus,
+      hasReceivedLoan: user.hasReceivedLoan || false,
+      currentLoanAmount: user.currentLoanAmount || 0,
+      loanStartDate: user.loanStartDate,
+      loanRepaymentDate: user.loanRepaymentDate,
+      loanOffer: user.loanOffer || 0,
     });
   } catch (err) {
     console.error('Get current user error:', err.message);
