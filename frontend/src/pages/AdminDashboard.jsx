@@ -249,6 +249,17 @@ function AdminDashboard() {
     });
   };
 
+  // EDIT MEMBER JOIN DATE
+  const openJoinDateEdit = (user) => {
+    setEditBal({
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      joinDate: user.createdAt ? new Date(user.createdAt).toISOString().split('T')[0] : '',
+      type: 'joinDate'
+    });
+  };
+
   const submitBalance = async (e) => {
     e.preventDefault();
     try {
