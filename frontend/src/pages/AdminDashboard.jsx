@@ -843,6 +843,28 @@ function AdminDashboard() {
         </div>
       )}
 
+      {/* MEMBER JOIN DATE EDIT MODAL */}
+      {editBal && editBal.type === 'joinDate' && (
+        <div className="modal-overlay" onClick={() => setEditBal(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Member Since Date - {editBal.name} ({editBal.email})</h3>
+              <button onClick={() => setEditBal(null)} className="close-btn"><FaTimes /></button>
+            </div>
+            <form onSubmit={submitBalance} className="balance-form">
+              <div className="input-group">
+                <label>Member Since Date</label>
+                <input type="date" value={editBal.joinDate || ''} onChange={e => setEditBal({...editBal, joinDate: e.target.value})} required />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="save-btn">Save Changes</button>
+                <button type="button" onClick={() => setEditBal(null)} className="cancel-btn">Cancel</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* TRANSACTIONS MODAL */}
       {editTxUser && (
         <div className="modal-overlay" onClick={() => setEditTxUser(null)}>
