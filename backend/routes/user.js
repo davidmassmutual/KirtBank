@@ -550,6 +550,45 @@ router.get('/:userId/notifications', verifyToken, isAdmin, async (req, res) => {
   }
 });
 
+// ──────────────────────────────────────────────────────────────
+// ADMIN: Update User Join Date
+// ──────────────────────────────────────────────────────────────
+router.put('/:userId/join-date', verifyToken, isAdmin, async (req, res) => {
+  try {
+    const { joinDate } = req.body;
+    const user = await User.findById(req.params.userId);
+
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    if (!joinDate) {
+      return res.status(400).json({ message: 'Join date is required' });
+    }
+
+    // Validate date format
+    const parsedDate = new Date(joinDate);
+    if (isNaN(parsedDate.getTime())) {
+      return res.status(400).json({ message: 'Invalid date format' });
+    }
+
+    // Update user's created date
+    user.createdAt = parsedDate;
+    await user.save();
+
+    // Return updated user
+    const updatedUser = await User.findById(user._id).select('-password');
+    
+    res.json({ 
+      message: 'Member since date updated successfully',
+      createdAt: updatedUser.createdAt 
+    });
+  } catch (err) {
+    console.error('Join date update error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
 // POST: Add notification to user
 router.post('/:userId/notifications', verifyToken, isAdmin, async (req, res) => {
   const { message, type } = req.body;
