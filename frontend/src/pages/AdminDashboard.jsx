@@ -280,6 +280,23 @@ function AdminDashboard() {
         ));
 
         toast.success('Investment balance updated successfully');
+      } else if (editBal.type === 'joinDate') {
+        // Update member join date
+        const res = await axios.put(
+          `${API}/api/user/${editBal.userId}/join-date`,
+          {
+            joinDate: editBal.joinDate
+          },
+          { headers: { Authorization: `Bearer ${token}` } }
+        );
+
+        setUsers(prev => prev.map(u =>
+          u._id === editBal.userId
+            ? { ...u, createdAt: res.data.createdAt }
+            : u
+        ));
+
+        toast.success('Member since date updated successfully');
       } else {
         // Update regular balances
         const res = await axios.put(
