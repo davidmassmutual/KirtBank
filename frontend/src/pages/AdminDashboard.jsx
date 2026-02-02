@@ -743,6 +743,9 @@ function AdminDashboard() {
                   <button onClick={() => setShowLoanInfo(!showLoanInfo)} className="action-btn manage-loans">
                     {showLoanInfo ? 'Hide Loan Info' : 'Manage Loans'}
                   </button>
+                  <button onClick={() => openJoinDateEdit(selectedUser)} className="action-btn edit-join-date">
+                    Edit Member Since
+                  </button>
                   <button onClick={() => {
                     // Placeholder for remove transactions action
                     toast.info('Remove transactions feature coming soon');
