@@ -57,7 +57,6 @@ function Navbar({ handleLogout, isAuthenticated }) {
     { path: '/account-summary', label: 'Account Summary', icon: <FaWallet /> },
     { path: '/transfer', label: 'Transfer', icon: <FaExchangeAlt /> },
     { path: '#', label: 'Deposit', icon: <FaExchangeAlt />, onClick: openDepositModal },
-    { path: '/crypto', label: 'Bitcoin', icon: <FaBitcoin /> },
     { path: '/loans', label: 'Loan', icon: <FaHandHoldingUsd /> },
     { path: '/investment', label: 'Investment', icon: <FaChartBar/> },
     { path: '/cards', label: 'Cards', icon: <FaCreditCard /> },
@@ -91,7 +90,7 @@ function Navbar({ handleLogout, isAuthenticated }) {
                   }}
                 />
               ) : null}
-              <div className="navbar-profile-placeholder" style={{ display: !user?.profileImage ? 'flex' : 'none' }}>
+              <div className="navbar-profile-placeholder" style={{ display: (!user?.profileImage || user?.profileImage === '/uploads/undefined' || user?.profileImage === '/uploads/null') ? 'flex' : 'none' }}>
                 <FaUserTie />
               </div>
               <span className="welcome-text">

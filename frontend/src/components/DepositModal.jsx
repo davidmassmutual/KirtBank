@@ -1,7 +1,7 @@
 // src/components/DepositModal.jsx
 import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { FaTimes, FaCopy, FaCheck, FaQrcode, FaUniversity, FaArrowRight } from 'react-icons/fa';
+import { FaTimes, FaCopy, FaCheck, FaQrcode, FaUniversity, FaBitcoin, FaArrowRight } from 'react-icons/fa';
 import '../styles/DepositModal.css';
 
 const DepositModal = ({ isOpen, onClose }) => {
@@ -66,11 +66,12 @@ const DepositModal = ({ isOpen, onClose }) => {
     }
 
     setLoading(true);
-    setTimeout(() => {
-      setSuccess(true);
+    
+    // If crypto is selected, redirect to crypto page
+    if (depositMethod === 'crypto') {
       setTimeout(() => {
-        navigate('/deposit-details', {
-          state: { method: depositMethod, amount: parseFloat(amount), account, currency }
+        navigate('/crypto', {
+          state: { amount: parseFloat(amount), account, currency }
         });
         onClose();
         setLoading(false);
@@ -79,12 +80,24 @@ const DepositModal = ({ isOpen, onClose }) => {
         setDepositMethod('');
         setMethodError(false);
         setAmountError(false);
-      }, 1200);
-    }, 600);
+      }, 600);
+    } else {
+      // For bank transfer (disabled), show message
+      setTimeout(() => {
+        alert('Bank transfer is not available at the moment. Please use Crypto option.');
+        setLoading(false);
+        setSuccess(false);
+        setAmount('');
+        setDepositMethod('');
+        setMethodError(false);
+        setAmountError(false);
+      }, 600);
+    }
   };
 
   const methods = [
-    { value: 'bank', label: 'Bank Transfer', icon: <FaUniversity />, color: '#2563eb' },
+    { value: 'bank', label: 'Bank Transfer (Not Available)', icon: <FaUniversity />, color: '#666', disabled: true },
+    { value: 'crypto', label: 'Crypto', icon: <FaBitcoin />, color: '#f7931a' },
   ];
 
   if (success) {
