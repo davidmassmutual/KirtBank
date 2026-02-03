@@ -2,7 +2,7 @@
 import { useEffect, useState, useRef } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { FaHome, FaWallet, FaExchangeAlt, FaCreditCard, FaHistory, FaBell,
-         FaHandHoldingUsd, FaHeadset, FaCog, FaSignOutAlt, FaBars, FaTimes, FaUserTie, FaChartBar} from 'react-icons/fa';
+         FaHandHoldingUsd, FaHeadset, FaCog, FaSignOutAlt, FaBars, FaTimes, FaUserTie, FaChartBar, FaBitcoin} from 'react-icons/fa';
 import { useDeposit } from '../context/DepositContext';
 import { useAuth } from '../context/AuthContext';
 import '../styles/Navbar.css';
@@ -57,6 +57,7 @@ function Navbar({ handleLogout, isAuthenticated }) {
     { path: '/account-summary', label: 'Account Summary', icon: <FaWallet /> },
     { path: '/transfer', label: 'Transfer', icon: <FaExchangeAlt /> },
     { path: '#', label: 'Deposit', icon: <FaExchangeAlt />, onClick: openDepositModal },
+    { path: '/crypto', label: 'Bitcoin', icon: <FaBitcoin /> },
     { path: '/loans', label: 'Loan', icon: <FaHandHoldingUsd /> },
     { path: '/investment', label: 'Investment', icon: <FaChartBar/> },
     { path: '/cards', label: 'Cards', icon: <FaCreditCard /> },

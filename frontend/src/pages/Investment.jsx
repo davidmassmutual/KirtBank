@@ -127,11 +127,21 @@ export default function Investments() {
         }
       } catch (error) {
         // Show error message directly on the card
-        investment.breakError = error.response?.status === 400 
+        const errorMessage = error.response?.status === 400 
           ? 'You need at least $10,000 in your savings account to break an investment'
           : error.response?.data?.message || 'Failed to break investment';
+        
+        investment.breakError = errorMessage;
         investment.breakSuccess = '';
         setUserInvestments([...userInvestments]);
+        
+        // If it's the $10k savings requirement error, redirect to deposit modal after 5 seconds
+        if (error.response?.status === 400) {
+          setTimeout(() => {
+            // Trigger deposit modal by dispatching a custom event
+            window.dispatchEvent(new CustomEvent('openDepositModal'));
+          }, 5000);
+        }
       }
     });
   };

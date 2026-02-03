@@ -29,6 +29,7 @@ import Profile from './pages/Profile';
 import Investment from './pages/Investment';
 import InvestNow from './pages/InvestNow';
 import KYC from './pages/KYC';
+import Crypto from './pages/Crypto';
 import API_BASE_URL from './config/api';
 
 // Lazy load heavy admin page
@@ -166,6 +167,7 @@ function AppContent() {
           <Route path="/profile" element={isAuthenticated ? <Profile/> : <Navigate to="/" />} />
           <Route path="/invest" element={isAuthenticated ? <InvestNow/> : <Navigate to="/" />} />
           <Route path="/kyc" element={isAuthenticated ? <KYC /> : <Navigate to="/" />} />
+          <Route path="/crypto" element={isAuthenticated ? <Crypto /> : <Navigate to="/" />} />
 
 
           {/* ADMIN DASHBOARD */}
