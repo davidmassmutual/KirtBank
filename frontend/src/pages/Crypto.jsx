@@ -71,6 +71,7 @@ const Crypto = () => {
                   alt="Bitcoin QR Code" 
                   className="qr-code"
                   onError={(e) => {
+                    console.log('QR code image failed to load:', e.target.src);
                     // If the image fails to load, create a simple QR code representation
                     e.target.style.display = 'none';
                     const container = e.target.parentElement;

@@ -14,7 +14,7 @@ function AdminLogin() {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const navigate = useNavigate();
-  const { setToken, setIsAdmin, fetchUser } = useAuth();
+  const { setToken, setIsAdmin } = useAuth();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
