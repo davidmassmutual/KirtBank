@@ -197,13 +197,39 @@ router.put('/profile', verifyToken, async (req, res) => {
 });
 
 // ──────────────────────────────────────────────────────────────
-// PUT: Upload Profile Image
+// PUT: Upload Profile Image (Admin Only)
 // ──────────────────────────────────────────────────────────────
-router.put('/profile/image', verifyToken, upload.single('profileImage'), async (req, res) => {
+router.put('/profile/image', verifyToken, isAdmin, upload.single('profileImage'), async (req, res) => {
   try {
     if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
 
     const user = await User.findById(req.userId);
+    if (!user) return res.status(404).json({ message: 'User not found' });
+
+    // Delete old image
+    if (user.profileImage) {
+      const oldPath = path.join(__dirname, '..', user.profileImage);
+      if (fs.existsSync(oldPath)) fs.unlinkSync(oldPath);
+    }
+
+    user.profileImage = `/uploads/${req.file.filename}`;
+    await user.save();
+
+    res.json({ message: 'Profile image updated', profileImage: user.profileImage });
+  } catch (err) {
+    console.error('Image upload error:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// ──────────────────────────────────────────────────────────────
+// PUT: Upload Profile Image for Specific User (Admin Only)
+// ──────────────────────────────────────────────────────────────
+router.put('/:userId/profile/image', verifyToken, isAdmin, upload.single('profileImage'), async (req, res) => {
+  try {
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded' });
+
+    const user = await User.findById(req.params.userId);
     if (!user) return res.status(404).json({ message: 'User not found' });
 
     // Delete old image

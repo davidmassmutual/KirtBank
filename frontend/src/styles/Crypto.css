@@ -194,6 +194,7 @@
   height: 250px;
   border-radius: 8px;
   border: 1px solid #ddd;
+  object-fit: contain;
 }
 
 .crypto-form {

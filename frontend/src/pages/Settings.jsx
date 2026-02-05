@@ -124,7 +124,7 @@ function Settings() {
       toast.success('Profile image updated successfully');
       setProfileImageFile(null);
     } catch (err) {
-      toast.error(err.response?.data?.message || 'Failed to upload image');
+      toast.error(err.response?.data?.message || 'Failed to upload image. Profile images can only be set by administrators.');
     } finally {
       setSubmitting(false);
     }

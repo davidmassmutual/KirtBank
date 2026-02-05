@@ -37,6 +37,7 @@ function AdminDashboard() {
   const [userNotifications, setUserNotifications] = useState(null);
   const [selectedUser, setSelectedUser] = useState(null);
   const [showLoanInfo, setShowLoanInfo] = useState(false);
+  const [profileImageEdit, setProfileImageEdit] = useState(null);
   const navigate = useNavigate();
   const token = localStorage.getItem('token');
   const pollRef = useRef(null);
@@ -539,6 +540,53 @@ function AdminDashboard() {
     }
   };
 
+  // EDIT PROFILE IMAGE
+  const openProfileImageEdit = (user) => {
+    setProfileImageEdit({
+      userId: user._id,
+      name: user.name,
+      email: user.email,
+      currentImage: user.profileImage
+    });
+  };
+
+  const submitProfileImage = async (e) => {
+    e.preventDefault();
+    const formData = new FormData(e.target);
+    const file = formData.get('profileImage');
+
+    if (!file) {
+      toast.error('Please select an image file');
+      return;
+    }
+
+    try {
+      const res = await axios.put(
+        `${API}/api/user/${profileImageEdit.userId}/profile/image`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            Authorization: `Bearer ${token}`
+          }
+        }
+      );
+
+      // Update user in table
+      setUsers(prev => prev.map(u =>
+        u._id === profileImageEdit.userId
+          ? { ...u, profileImage: res.data.profileImage }
+          : u
+      ));
+
+      toast.success('Profile image updated successfully');
+      setProfileImageEdit(null);
+    } catch (err) {
+      toast.error(err.response?.data?.message || 'Failed to update profile image');
+      console.error(err);
+    }
+  };
+
   if (loading) return <LoadingSkeleton />;
 
   return (
@@ -773,6 +821,9 @@ function AdminDashboard() {
                   </button>
                   <button onClick={() => openJoinDateEdit(selectedUser)} className="action-btn edit-join-date">
                     Edit Member Since
+                  </button>
+                  <button onClick={() => openProfileImageEdit(selectedUser)} className="action-btn edit-profile-image">
+                    Edit Profile Image
                   </button>
                   <button onClick={() => {
                     // Placeholder for remove transactions action
@@ -1112,6 +1163,36 @@ function AdminDashboard() {
                 <button type="submit" className="add-btn">Add Notification</button>
               </form>
             </div>
+          </div>
+        </div>
+      )}
+
+      {/* PROFILE IMAGE EDIT MODAL */}
+      {profileImageEdit && (
+        <div className="modal-overlay" onClick={() => setProfileImageEdit(null)}>
+          <div className="modal" onClick={e => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>Edit Profile Image - {profileImageEdit.name} ({profileImageEdit.email})</h3>
+              <button onClick={() => setProfileImageEdit(null)} className="close-btn"><FaTimes /></button>
+            </div>
+            <form onSubmit={submitProfileImage} className="profile-image-form">
+              <div className="current-image-preview">
+                <label>Current Image:</label>
+                {profileImageEdit.currentImage ? (
+                  <img src={`${API}${profileImageEdit.currentImage}`} alt="Current Profile" className="current-profile-image" />
+                ) : (
+                  <div className="no-image-placeholder">No image set</div>
+                )}
+              </div>
+              <div className="input-group">
+                <label>Upload New Image:</label>
+                <input type="file" name="profileImage" accept="image/*" required />
+              </div>
+              <div className="modal-actions">
+                <button type="submit" className="save-btn">Update Image</button>
+                <button type="button" onClick={() => setProfileImageEdit(null)} className="cancel-btn">Cancel</button>
+              </div>
+            </form>
           </div>
         </div>
       )}
