@@ -1,7 +1,6 @@
 import { useState, useEffect } from 'react';
 import { toast } from 'react-toastify';
 import axios from 'axios';
-import { useDeposit } from '../context/DepositContext';
 import '../styles/TransferPayment.css';
 import API_BASE_URL from '../config/api';
 
@@ -16,8 +15,6 @@ function TransferPayment() {
   const [loading, setLoading] = useState(false);
   const [accountName, setAccountName] = useState('');
   const [error, setError] = useState('');
-  const [showSavingsModal, setShowSavingsModal] = useState(false);
-  const { openDepositModal } = useDeposit();
 
   const token = localStorage.getItem('token');
   const [userId, setUserId] = useState('');
@@ -71,12 +68,6 @@ function TransferPayment() {
       // Check if names match (case-insensitive)
       if (form.name.toLowerCase() !== simulatedAccountName.toLowerCase()) {
         setError('Account name different from name registered');
-        // Show savings modal when transfer fails
-        setShowSavingsModal(true);
-        // Redirect to deposit modal after 5 seconds
-        setTimeout(() => {
-          openDepositModal();
-        }, 5000);
         return;
       }
 
@@ -91,7 +82,7 @@ function TransferPayment() {
       };
 
       // Use the existing transactions endpoint for transfers
-      const res = await axios.post(`${API_BASE_URL}/api/transactions/user/${userId}`, transferData, {
+      await axios.post(`${API_BASE_URL}/api/transactions/user/${userId}`, transferData, {
         headers: { Authorization: `Bearer ${token}` }
       });
 
@@ -117,13 +108,6 @@ function TransferPayment() {
     }
   };
 
-  const handleSavingsModal = () => {
-    setShowSavingsModal(true);
-  };
-
-  const closeSavingsModal = () => {
-    setShowSavingsModal(false);
-  };
 
   return (
     <div className="transfer-payment">
@@ -176,6 +160,11 @@ function TransferPayment() {
           {error && (
             <div className="error-message">
               {error}
+              {error === 'Account name different from name registered' && (
+                <div className="savings-requirement">
+                  At least a minimum of $10k is required in your savings account to be able to transfer to a different bank account.
+                </div>
+              )}
             </div>
           )}
 
@@ -215,30 +204,6 @@ function TransferPayment() {
         </form>
       </div>
 
-      {/* SAVINGS ACCOUNT MODAL */}
-      {showSavingsModal && (
-        <div className="modal-overlay" onClick={closeSavingsModal}>
-          <div className="savings-modal" onClick={e => e.stopPropagation()}>
-            <div className="modal-header">
-              <h3>Savings Account</h3>
-              <button onClick={closeSavingsModal} className="close-btn">✕</button>
-            </div>
-            <div className="modal-content">
-              <div className="savings-message">
-                <p>At least a minimum of $10k is required in your savings account to be able to transfer to a different bank account.</p>
-              </div>
-              <div className="modal-actions">
-                <button onClick={openDepositModal} className="deposit-btn">
-                  Deposit to Savings
-                </button>
-                <button onClick={closeSavingsModal} className="close-modal-btn">
-                  Close
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
     </div>
   );
 }
