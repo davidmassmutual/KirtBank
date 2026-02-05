@@ -77,7 +77,7 @@ function Navbar({ handleLogout, isAuthenticated }) {
           <div className="brand-header">
             <h1>Kirt Bank <img src={img9} alt="" className='navbar-brand-image' /></h1>
             <div className="welcome-section">
-              {user?.profileImage ? (
+              {user?.profileImage && user.profileImage !== '/uploads/undefined' && user.profileImage !== '/uploads/null' ? (
                 <img
                   src={`${API_BASE_URL}${user.profileImage}`}
                   alt="Profile"

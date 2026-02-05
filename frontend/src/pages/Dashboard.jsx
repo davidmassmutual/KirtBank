@@ -19,6 +19,30 @@ import { FaPlus, FaChartLine, FaExchangeAlt, FaCreditCard, FaBell } from 'react-
 import '../styles/Dashboard.css';
 import API_BASE_URL from '../config/api';
 
+// Add a component to display profile image in dashboard
+const ProfileImageDisplay = ({ user }) => {
+  if (!user?.profileImage || user.profileImage === '/uploads/undefined' || user.profileImage === '/uploads/null') {
+    return (
+      <div className="dashboard-profile-placeholder">
+        <FaBell />
+      </div>
+    );
+  }
+
+  return (
+    <img
+      src={`${API_BASE_URL}${user.profileImage}`}
+      alt="Profile"
+      className="dashboard-profile-image"
+      onError={(e) => {
+        e.target.style.display = 'none';
+        const placeholder = e.target.nextElementSibling;
+        if (placeholder) placeholder.style.display = 'flex';
+      }}
+    />
+  );
+};
+
 function Dashboard() {
   const { user, loading, fetchUser } = useAuth();
   const [showNotifications, setShowNotifications] = useState(false);
@@ -93,6 +117,12 @@ function Dashboard() {
           <p>KYC Pending — Upload ID to <Link to="/kyc">Complete KYC</Link> </p>
         </div>
       )}
+
+      {/* PROFILE IMAGE DISPLAY */}
+      <div className="welcome-section">
+        <ProfileImageDisplay user={user} />
+        <h1>Welcome, {user?.name?.split(' ')[0] || 'User'}</h1>
+      </div>
 
      
 
