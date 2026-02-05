@@ -70,6 +70,23 @@ const Crypto = () => {
                   src="/images/photo_2026-01-29 18.26.16.jpeg" 
                   alt="Bitcoin QR Code" 
                   className="qr-code"
+                  onError={(e) => {
+                    // If the image fails to load, create a simple QR code representation
+                    e.target.style.display = 'none';
+                    const container = e.target.parentElement;
+                    const fallback = document.createElement('div');
+                    fallback.className = 'qr-fallback';
+                    fallback.innerHTML = `
+                      <div style="background: #f3f4f6; padding: 20px; border-radius: 8px; text-align: center;">
+                        <div style="font-size: 48px; margin-bottom: 10px;">₿</div>
+                        <div style="font-size: 12px; color: #666; margin-bottom: 15px;">Bitcoin QR Code</div>
+                        <div style="font-family: monospace; font-size: 11px; background: white; padding: 8px; border-radius: 4px; border: 1px solid #ddd;">
+                          ${bitcoinAddress}
+                        </div>
+                      </div>
+                    `;
+                    container.appendChild(fallback);
+                  }}
                 />
               </div>
             </div>
