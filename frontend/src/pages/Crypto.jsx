@@ -8,7 +8,7 @@ const Crypto = () => {
   const [copied, setCopied] = useState(false);
   const [loading, setLoading] = useState(false);
 
-  const bitcoinAddress = 'bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh';
+  const bitcoinAddress = '1N43mXw49SSYKSjuyfPsZmLg738QzkzhFm';
 
   const handleCopy = (address) => {
     navigator.clipboard.writeText(address);
